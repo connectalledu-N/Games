@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Louis XIV — CM1 History Adventure</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root{
+  --gold:#d4af37; --blue:#1e3a8a; --red:#b91c1c; --cream:#fdf6e3;
+  --purple:#5b21b6; --green:#15803d;
+}
+*{box-sizing:border-box;}
+body{
+  margin:0; font-family:'Segoe UI',Tahoma,sans-serif;
+  background:linear-gradient(180deg,#fdf6e3,#f3e5ab 40%,#e8d48a);
+  min-height:100vh; color:#2a1a05;
+}
+header{
+  background:linear-gradient(90deg,#1e3a8a,#5b21b6);
+  color:#fff; padding:14px 18px; display:flex; align-items:center; gap:14px;
+  box-shadow:0 4px 10px rgba(0,0,0,.3); position:sticky; top:0; z-index:50;
+  flex-wrap:wrap;
+}
+header h1{margin:0; font-size:1.25rem; flex:1;}
+header h1 span{display:block; font-size:.75rem; font-weight:400; opacity:.85;}
+nav{display:flex; gap:6px; flex-wrap:wrap;}
+nav button{
+  background:rgba(255,255,255,.15); border:2px solid rgba(255,255,255,.4);
+  color:#fff; padding:7px 12px; border-radius:20px; cursor:pointer;
+  font-size:.85rem; font-weight:600; transition:.2s;
+}
+nav button:hover, nav button.active{background:var(--gold); color:#3a2400; border-color:var(--gold);}
+main{max-width:1000px; margin:0 auto; padding:20px 14px 60px;}
+.view{display:none;}
+.view.active{display:block; animation:fadein .3s;}
+@keyframes fadein{from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:translateY(0);}}
+
+.hero{
+  background:#fff; border:3px solid var(--gold); border-radius:18px; padding:22px;
+  text-align:center; box-shadow:0 6px 18px rgba(0,0,0,.12); margin-bottom:20px;
+}
+.hero .crown{font-size:3rem;}
+.hero h2{margin:6px 0; color:var(--blue);}
+.card-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:14px;}
+.tile{
+  background:#fff; border-radius:14px; padding:16px; box-shadow:0 4px 10px rgba(0,0,0,.1);
+  border-left:6px solid var(--gold); cursor:pointer; transition:.2s;
+}
+.tile:hover{transform:translateY(-3px); box-shadow:0 8px 16px rgba(0,0,0,.18);}
+.tile h3{margin:0 0 6px; color:var(--blue);}
+.tile p{margin:0; font-size:.85rem; color:#555;}
+.pill{display:inline-block; background:var(--gold); color:#3a2400; font-weight:700; font-size:.7rem; border-radius:10px; padding:2px 8px; margin-bottom:6px;}
+
+/* FLASHCARDS */
+.deck-tabs{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px;}
+.deck-tabs button{
+  background:#fff; border:2px solid var(--blue); color:var(--blue); padding:6px 14px;
+  border-radius:20px; cursor:pointer; font-weight:700;
+}
+.deck-tabs button.active{background:var(--blue); color:#fff;}
+.flash-area{display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:16px;}
+.flashcard{
+  perspective:1000px; height:190px; cursor:pointer;
+}
+.flashcard .inner{
+  position:relative; width:100%; height:100%; transition:transform .5s; transform-style:preserve-3d;
+}
+.flashcard.flipped .inner{transform:rotateY(180deg);}
+.face{
+  position:absolute; width:100%; height:100%; backface-visibility:hidden;
+  border-radius:14px; padding:14px; display:flex; flex-direction:column; justify-content:center;
+  box-shadow:0 4px 10px rgba(0,0,0,.18); text-align:center;
+}
+.face.front{background:linear-gradient(160deg,#1e3a8a,#3b5bdb); color:#fff;}
+.face.back{background:linear-gradient(160deg,#d4af37,#f3d56b); color:#3a2400; transform:rotateY(180deg);}
+.face .tag{font-size:.65rem; text-transform:uppercase; opacity:.8; margin-bottom:6px;}
+.face .main{font-size:1.15rem; font-weight:700;}
+.face .sub{font-size:.85rem; margin-top:6px; font-style:italic;}
+.face .hint{font-size:.7rem; margin-top:8px; opacity:.85;}
+
+/* TIMELINE */
+.timeline{position:relative; padding-left:30px; border-left:4px solid var(--gold); margin-top:10px;}
+.tl-item{position:relative; margin-bottom:22px; background:#fff; border-radius:12px; padding:12px 16px; box-shadow:0 3px 8px rgba(0,0,0,.1);}
+.tl-item::before{
+  content:"👑"; position:absolute; left:-44px; top:10px; background:var(--gold);
+  border-radius:50%; width:30px; height:30px; display:flex; align-items:center; justify-content:center; font-size:.9rem;
+  box-shadow:0 0 0 4px #fdf6e3;
+}
+.tl-year{font-weight:800; color:var(--red); font-size:1.1rem;}
+.tl-en{margin:4px 0 2px;}
+.tl-fr{color:var(--purple); font-weight:600;}
+
+/* EXPLORER */
+.qcard{background:#fff; border-radius:14px; padding:16px; margin-bottom:14px; box-shadow:0 3px 8px rgba(0,0,0,.1); border-top:5px solid var(--blue);}
+.qcard .pagetag{background:var(--blue); color:#fff; font-size:.7rem; padding:2px 8px; border-radius:8px; margin-right:6px;}
+.qcard .frq{color:var(--purple); font-weight:700; margin:8px 0 2px;}
+.qcard .enq{color:#444; font-style:italic; margin-bottom:8px;}
+.toggle-ans{background:var(--gold); border:none; padding:6px 12px; border-radius:10px; cursor:pointer; font-weight:700;}
+.answer{display:none; margin-top:8px; background:#fdf6e3; border-radius:10px; padding:10px;}
+.answer.show{display:block;}
+.img-illustration{
+  border-radius:12px; padding:14px; margin-bottom:10px; color:#fff; font-weight:600; text-align:center;
+  background:linear-gradient(135deg,var(--blue),var(--purple));
+}
+
+/* QUIZ */
+.level-select{display:flex; gap:10px; margin-bottom:16px; flex-wrap:wrap;}
+.level-select button{flex:1; min-width:160px; padding:14px; border-radius:14px; border:3px solid var(--blue); background:#fff; cursor:pointer; font-weight:800; font-size:1rem;}
+.level-select button.active{background:var(--blue); color:#fff;}
+.quiz-box{background:#fff; border-radius:16px; padding:20px; box-shadow:0 4px 14px rgba(0,0,0,.15);}
+.qprog{font-size:.8rem; color:#666; margin-bottom:8px;}
+.qtext-en{font-size:1.05rem; font-weight:700; color:var(--blue);}
+.qtext-fr{font-size:.95rem; color:var(--purple); margin-bottom:14px;}
+.options{display:grid; gap:10px;}
+.opt{background:#fdf6e3; border:2px solid #e3c97a; padding:10px 14px; border-radius:10px; cursor:pointer; text-align:left; font-size:.95rem;}
+.opt:hover{background:#f3e0a5;}
+.opt.correct{background:#bbf7d0; border-color:var(--green);}
+.opt.wrong{background:#fecaca; border-color:var(--red);}
+.fillrow{display:flex; gap:8px; margin-top:6px;}
+.fillrow input{flex:1; padding:10px; border-radius:10px; border:2px solid var(--purple); font-size:1rem;}
+.fillrow button{padding:10px 16px; border-radius:10px; border:none; background:var(--blue); color:#fff; font-weight:700; cursor:pointer;}
+.feedback{margin-top:12px; padding:10px; border-radius:10px; font-weight:600;}
+.feedback.ok{background:#bbf7d0; color:#14532d;}
+.feedback.bad{background:#fecaca; color:#7f1d1d;}
+.nextbtn{margin-top:14px; background:var(--gold); border:none; padding:10px 20px; border-radius:10px; font-weight:800; cursor:pointer;}
+.scoreboard{text-align:center;}
+.scoreboard .big{font-size:3rem;}
+
+/* BADGES */
+.badge-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:14px;}
+.badge{background:#fff; border-radius:14px; padding:16px; text-align:center; box-shadow:0 3px 8px rgba(0,0,0,.1); opacity:.35;}
+.badge.unlocked{opacity:1; border:3px solid var(--gold);}
+.badge .ico{font-size:2.4rem;}
+.badge h4{margin:6px 0 2px; font-size:.9rem;}
+.badge p{font-size:.7rem; color:#666; margin:0;}
+.progressbar{background:#eee; border-radius:10px; height:14px; overflow:hidden; margin:10px 0;}
+.progressbar .fill{height:100%; background:linear-gradient(90deg,var(--gold),var(--red)); width:0%; transition:.4s;}
+
+footer{text-align:center; padding:14px; font-size:.75rem; color:#7a5a20;}
+.parent-note{background:#fff7e0; border:2px dashed var(--gold); border-radius:12px; padding:12px; font-size:.85rem; margin:14px 0;}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>👑 Louis XIV Adventure <span>CM1 History — Le Temps des Rois (manuel p. 82–92)</span></h1>
+  <nav id="nav"></nav>
+</header>
+
+<main id="main"></main>
+
+<footer>Made for revising the "Louis XIV" chapter — flip cards, explore the textbook, take quizzes, win badges.</footer>
+
+<script>
+/* ============================== DATA ============================== */
+
+const PEOPLE = [
+ {tag:"King", fr:"Louis XIV", en:"Becomes king in 1643 at age 5. Ruled alone from 1661. Called 'Roi-Soleil' (Sun King) — center of the kingdom, like the sun is the center of the sky. Died in 1715.", icon:"👑"},
+ {tag:"Mother / Regent", fr:"Anne d'Autriche", en:"Louis XIV's mother. Because he was only 5, SHE ruled as regent (in his place) from 1643, helped by Cardinal Mazarin.", icon:"👸"},
+ {tag:"Minister", fr:"Cardinal Mazarin", en:"A cardinal (high churchman) who helped Anne d'Autriche govern. He died in 1661 — that's when Louis XIV started ruling completely alone.", icon:"⛪"},
+ {tag:"Minister of Finance", fr:"Colbert", en:"Louis XIV's finance minister. He grew French trade/commerce and started royal workshops called 'manufactures' (like the Gobelins, which made tapestries).", icon:"💰"},
+ {tag:"Minister of War", fr:"Louvois", en:"One of Louis XIV's two key smart ministers (with Colbert) who managed the army and war.", icon:"⚔️"},
+ {tag:"Disgraced official", fr:"Fouquet", en:"Was 'surintendant des Finances' (superintendent of finances) before Colbert — Louis XIV had him arrested for being too rich/showing off.", icon:"⚖️"},
+ {tag:"Military Engineer", fr:"Vauban", en:"In charge of building fortified towns (like Belle-Île-en-mer) to protect France's borders from enemy attacks.", icon:"🏰"},
+ {tag:"Playwright", fr:"Molière", en:"A famous playwright (writer of plays) protected by Louis XIV — wrote 'Le Médecin malgré lui' in 1666.", icon:"🎭"},
+ {tag:"Musician", fr:"Lully", en:"A famous musician/composer at the court of Louis XIV, who helped organize royal parties and ballets.", icon:"🎻"},
+ {tag:"Bishop", fr:"Bossuet", en:"A bishop who said the king's power comes from God — 'the throne is the throne of God himself.' This is the idea of 'monarchie de droit divin' (divine right monarchy).", icon:"📖"},
+];
+
+const TIMELINE = [
+ {year:"1638", en:"Louis XIV is born.", fr:"Naissance de Louis XIV."},
+ {year:"1643", en:"Louis XIII (his father) dies. Louis XIV becomes king — he is only 5 years old! His mother Anne d'Autriche rules for him (regency), helped by Cardinal Mazarin.", fr:"Louis XIV devient roi à 5 ans. Régence d'Anne d'Autriche et de Mazarin."},
+ {year:"1648–1653", en:"La Fronde: nobles and parlements (judges) revolt against royal power. The royal family has to flee Paris. This scares young Louis XIV and makes him distrust nobles forever.", fr:"La Fronde : révolte des nobles contre le pouvoir royal."},
+ {year:"1654", en:"The 'Sacre' (coronation) of Louis XIV at Reims cathedral on 7 June — he is blessed and crowned by a bishop, given the royal sceptre and the 'main de justice'.", fr:"Sacre de Louis XIV à Reims, le 7 juin."},
+ {year:"1661", en:"Cardinal Mazarin dies. Louis XIV (now 22) decides to govern completely ALONE — no more Prime Minister. He becomes an absolute monarch.", fr:"Mort de Mazarin. Louis XIV gouverne seul : début du règne personnel."},
+ {year:"1682", en:"Louis XIV moves the royal Court to the Château de Versailles, to keep the nobles close and under control, surrounded by very strict daily rules ('l'étiquette').", fr:"Installation de la Cour à Versailles."},
+ {year:"1685", en:"Louis XIV revokes ('révoque') the Edict of Nantes. Protestants ('Huguenots') lose their right to worship; churches ('temples') are destroyed; soldiers ('dragons') force conversions — this is called a 'dragonnade'.", fr:"Révocation de l'édit de Nantes : le culte protestant est interdit."},
+ {year:"1715", en:"Louis XIV dies, after 72 years as king (the longest reign in French history!). He is succeeded by his great-grandson, Louis XV.", fr:"Mort de Louis XIV."},
+];
+
+const VOCAB = [
+ {fr:"monarque absolu", en:"An absolute monarch — a king who holds ALL the power: he makes laws, applies them, and judges. No one can question him.", spell:"mo-nar-que ab-so-lu"},
+ {fr:"droit divin", en:"'Divine right' — the idea that the king's power comes directly from God, so no human can question it.", spell:"droit di-vin"},
+ {fr:"régence / régente", en:"When someone rules IN PLACE of a king who is too young (or absent). Anne d'Autriche was the 'régente'.", spell:"ré-gen-ce"},
+ {fr:"cardinal", en:"A very important person in the Catholic Church (just below the Pope). Mazarin was a cardinal.", spell:"car-di-nal"},
+ {fr:"intendant", en:"A representative of the king sent to the provinces (regions) to enforce his power, justice and taxes.", spell:"in-ten-dant"},
+ {fr:"la Cour", en:"'The Court' — all the nobles and important people who live around the king at Versailles.", spell:"la Cour"},
+ {fr:"étiquette", en:"The very strict set of rules that organise every moment of life at the court of Versailles.", spell:"é-ti-quette"},
+ {fr:"privilège", en:"A special advantage or right that only some people (like nobles) have.", spell:"pri-vi-lège"},
+ {fr:"pension", en:"Money given regularly by the king to someone (like an artist) to support them.", spell:"pen-sion"},
+ {fr:"manufacture", en:"A royal workshop where products (like tapestries or mirrors) were made by hand by many workers. E.g. the Gobelins manufacture.", spell:"ma-nu-fac-ture"},
+ {fr:"faste", en:"Luxury, grandeur — used to describe the very rich, showy decoration of Versailles.", spell:"faste"},
+ {fr:"disette", en:"A lack of food — a food shortage, often caused by bad harvests.", spell:"di-sette"},
+ {fr:"manouvrier", en:"A farm worker who owns no land and rents out his labour — most peasants were manouvriers.", spell:"ma-nou-vrier"},
+ {fr:"rentier", en:"A rich person (often a noble) who lives off income from their land/investments, without working.", spell:"ren-tier"},
+ {fr:"dragonnade", en:"A violent campaign where soldiers ('dragons') were sent to live in Protestant homes and force them, often brutally, to convert to Catholicism.", spell:"dra-gon-nade"},
+ {fr:"édit de Nantes", en:"A law signed by Henri IV in 1598 that gave Protestants the right to practise their religion freely. Louis XIV cancelled ('revoked') it in 1685.", spell:"é-dit de Nantes"},
+ {fr:"Roi-Soleil", en:"'Sun King' — Louis XIV's nickname, because like the sun is the centre of the sky, he saw himself as the centre of the kingdom.", spell:"Roi-So-leil"},
+ {fr:"lettre de cachet", en:"A letter signed by the king that could send anyone to prison WITHOUT a trial — a symbol of his absolute power.", spell:"let-tre de ca-chet"},
+];
+
+const PLACES = [
+ {fr:"Château de Versailles", en:"Louis XIV's huge, luxurious palace outside Paris where he moved the whole royal Court in 1682, to control the nobility.", icon:"🏛️"},
+ {fr:"La galerie des Glaces", en:"The 'Hall of Mirrors' at Versailles — a spectacular, very long room full of mirrors and gold, used to impress visitors and show off royal power.", icon:"🪞"},
+ {fr:"Les jardins de Versailles", en:"The huge symmetrical gardens of Versailles, with fountains and a statue of Apollo (Greek sun god, symbol of the Sun King).", icon:"🌳"},
+ {fr:"Reims", en:"The cathedral city where French kings, including Louis XIV (in 1654), were crowned ('sacrés').", icon:"⛪"},
+ {fr:"Belle-Île-en-mer", en:"An island off the coast of Brittany, fortified by Vauban to defend France's coast.", icon:"🏝️"},
+ {fr:"Versailles — Cour d'honneur / Chambre du roi", en:"The chambre du roi (king's bedroom) sits exactly on the central axis of the château and gardens — showing the king is literally the centre of everything.", icon:"🛏️"},
+];
+
+/* Blue textbook questions ("Level 2" explorer) — with page reference, FR question (as in book), EN explanation + model FR answer */
+const EXPLORER = [
+ {page:82, img:"🟦 Schéma : LE ROI → Les Conseils / Les Ministres → Provinces du Royaume", fr:"Que montre ce schéma sur la répartition du pouvoir sous Louis XIV ?", en:"What does this diagram show about how power was shared under Louis XIV?", ans:"Tout part du roi : il commande les conseils, les ministres et contrôle les provinces grâce aux intendants. Tout le pouvoir vient de lui."},
+ {page:82, img:"🟨 Texte : Louis XIV, Mémoires pour l'instruction du Dauphin", fr:"Pourquoi Louis XIV ne veut-il pas prendre de Premier ministre ?", en:"Why doesn't Louis XIV want to have a Prime Minister?", ans:"Parce qu'il veut garder TOUT le pouvoir pour lui seul : avoir un Premier ministre serait partager son autorité."},
+ {page:82, img:"📜 Document : une lettre de cachet", fr:"Pourquoi la lettre de cachet est-elle un symbole de la monarchie absolue ?", en:"Why is the 'lettre de cachet' a symbol of absolute monarchy?", ans:"Parce qu'avec une simple lettre signée par le roi, on peut emprisonner quelqu'un sans procès : le roi décide seul, sans justice ni jugement."},
+ {page:83, img:"🖼️ Tapisserie : Le Sacre de Louis XIV à Reims, 1654", fr:"Que signifie la présence de ces différents personnages (à la cérémonie du sacre) ?", en:"What does the presence of all these different people at the coronation mean?", ans:"Cela montre l'importance de la cérémonie : nobles, évêques et représentants de l'Église sont réunis pour bénir et reconnaître le roi comme représentant de Dieu sur Terre."},
+ {page:83, img:"🟨 Texte : Bossuet, Politique tirée de l'Écriture sainte", fr:"Quel est le rôle du roi (ou des princes) selon Bossuet ?", en:"According to Bossuet, what is the king's role?", ans:"Selon Bossuet, le roi agit comme le ministre de Dieu sur Terre : le trône royal est en réalité le trône de Dieu lui-même."},
+ {page:84, img:"🖼️ Peinture : Louis XIV entouré de courtisans, 1713", fr:"Compare l'attitude du roi et celle des courtisans. Que peux-tu en déduire ?", en:"Compare the king's attitude with the courtiers'. What can you conclude?", ans:"Le roi est détendu, au centre ; les courtisans se penchent vers lui, attentifs. On voit que tout tourne autour du roi et que les nobles cherchent à lui plaire."},
+ {page:84, img:"🗺️ Plan du château de Versailles", fr:"Où se situe la chambre du roi ? Qu'est-ce que cela montre ?", en:"Where is the king's bedroom located? What does this show?", ans:"La chambre du roi est au centre exact du château, sur l'axe de symétrie. Cela montre que le roi est le centre de tout le royaume."},
+ {page:84, img:"📋 Emploi du temps du roi (7h30 Réveil → 23h00 Coucher)", fr:"En quoi un emploi du temps si précis permet à Louis XIV de contrôler la noblesse ?", en:"How does such a precise schedule help Louis XIV control the nobility?", ans:"Comme les nobles doivent assister à chaque moment de la journée du roi (lever, messe, coucher...), ils restent occupés près de lui et ne peuvent pas comploter ailleurs."},
+ {page:85, img:"🟨 Texte : Louis XIV sur l'intérêt des spectacles", fr:"À quoi servent les spectacles selon Louis XIV ?", en:"What are the royal shows/parties for, according to Louis XIV?", ans:"Les spectacles servent à plaire au peuple (pour gagner son cœur) et à impressionner les souverains étrangers en montrant la richesse et la puissance du royaume."},
+ {page:85, img:"🪞 La galerie des Glaces", fr:"Décris la galerie des Glaces. En quoi symbolise-t-elle la puissance du roi ?", en:"Describe the Hall of Mirrors. How does it symbolize the king's power?", ans:"C'est une immense galerie couverte de miroirs et de dorures, avec un plafond peint. Son luxe extraordinaire montre la richesse et la grandeur du Roi-Soleil."},
+ {page:88, img:"🎻 Allégorie à Louis XIV, protecteur des Arts et des Sciences", fr:"Quels sont les domaines représentés ici ?", en:"Which fields/areas are represented in this painting?", ans:"La musique, la peinture, les sciences et la littérature : Louis XIV protège et finance les arts et les sciences."},
+ {page:88, img:"🏭 Visite de Louis XIV à la manufacture des Gobelins, 1667", fr:"Que produisait cette célèbre manufacture ? À quoi cela servait-il ?", en:"What did this famous workshop produce, and what was it used for?", ans:"La manufacture des Gobelins produisait des tapisseries de très grande qualité, utilisées pour décorer les palais royaux et montrer le savoir-faire français."},
+ {page:89, img:"🗺️ Carte : l'agrandissement du royaume sous Louis XIV", fr:"Quels sont les territoires gagnés par Louis XIV ?", en:"Which territories did Louis XIV gain for France?", ans:"La Flandre, l'Artois, le Hainaut, l'Alsace, la Franche-Comté et le Roussillon."},
+ {page:89, img:"🏝️ Citadelle de Belle-Île-en-mer (fortifiée par Vauban)", fr:"À quoi peut servir une telle construction ?", en:"What is such a fortified construction used for?", ans:"Cette citadelle sert à protéger la côte et le territoire français contre des attaques ennemies venues de la mer."},
+ {page:90, img:"🖼️ Louis Le Nain, Famille de paysans dans un intérieur, 1642", fr:"Observe les personnages et le décor du tableau. Que peux-tu en conclure sur leur mode de vie ?", en:"Look at the people and setting in the painting. What can you conclude about their way of life?", ans:"Les vêtements simples, la maison sombre avec peu de meubles et la nourriture pauvre montrent que cette famille de paysans vit dans des conditions modestes et difficiles."},
+ {page:90, img:"🖼️ Nicolas de Largillière, Portrait de la famille du maréchal de Noailles, 1689", fr:"Quels signes de richesse observes-tu sur ce tableau ?", en:"What signs of wealth do you see in this painting?", ans:"Les beaux habits brodés, les bijoux, le décor luxueux, le château et les animaux de compagnie (chiens) montrent la grande richesse de cette famille noble."},
+ {page:91, img:"🟨 Texte : Jean Héroard, Journal sur l'enfance et la jeunesse de Louis XIII", fr:"À quel âge Louis XIII a-t-il été lavé avec de l'eau pour la première fois ?", en:"At what age was Louis XIII first washed with water?", ans:"Il avait environ 5 ans (le 3 octobre 1606, né en 1601) — l'hygiène à l'époque était très limitée."},
+ {page:91, img:"🎭 Molière, Le Médecin malgré lui, 1666", fr:"Que penses-tu des soins proposés par Sganarelle ?", en:"What do you think of the treatment Sganarelle suggests?", ans:"C'est un faux remède (du pain trempé dans du vin) : cela montre que la médecine du XVIIe siècle était souvent peu sérieuse et hasardeuse."},
+ {page:91, img:"🩺 Gravure : Le tout par précaution (médecine, XVIIIe siècle)", fr:"Comment les médecins soignent-ils la malade ?", en:"How are the doctors treating the sick woman in this engraving?", ans:"Ils pratiquent une saignée (ils lui prélèvent du sang) — un traitement très courant mais peu efficace et parfois dangereux au XVIIe siècle."},
+ {page:92, img:"🖼️ Gravure satirique : moyens pour ramener les hérétiques à la foi catholique, 1679", fr:"Quels sont les moyens utilisés pour obliger les protestants à se convertir ?", en:"What methods were used to force Protestants to convert?", ans:"Le supplice de la roue et la condamnation aux galères — des punitions très violentes pour effrayer les protestants."},
+ {page:92, img:"📜 Récit d'une dragonnade, Abraham Papot, 1685", fr:"Qu'est-ce qu'une « dragonnade » ?", en:"What is a 'dragonnade'?", ans:"C'est quand des soldats (les dragons) sont logés par la force chez des protestants et les menacent violemment pour les forcer à se convertir au catholicisme."},
+];
+
+/* ===== QUIZZES ===== */
+const QUIZ1 = [ // Level 1 — direct, simple recall (MCQ)
+ {q_en:"In what year did Louis XIV become king?", q_fr:"En quelle année Louis XIV devient-il roi ?", opts:["1638","1643","1661","1715"], a:1},
+ {q_en:"How old was Louis XIV when he became king?", q_fr:"Quel âge avait Louis XIV en devenant roi ?", opts:["5 ans","12 ans","22 ans","30 ans"], a:0},
+ {q_en:"What was the name of Louis XIV's mother?", q_fr:"Comment s'appelle la mère de Louis XIV ?", opts:["Marie de Médicis","Anne d'Autriche","Catherine de France","Isabelle d'Espagne"], a:1},
+ {q_en:"Which cardinal helped govern during the regency?", q_fr:"Quel cardinal aide la régente ?", opts:["Cardinal Richelieu","Cardinal Mazarin","Cardinal Bossuet","Cardinal Colbert"], a:1},
+ {q_en:"In what year did Louis XIV start ruling completely alone?", q_fr:"À partir de quelle année Louis XIV gouverne-t-il seul ?", opts:["1654","1661","1682","1685"], a:1},
+ {q_en:"What word describes a king who holds ALL the power?", q_fr:"Comment appelle-t-on un roi qui détient tous les pouvoirs ?", opts:["un monarque absolu","un monarque limité","un régent","un intendant"], a:0},
+ {q_en:"Who are the king's representatives sent to the provinces?", q_fr:"Comment appelle-t-on les représentants du roi dans les provinces ?", opts:["les cardinaux","les courtisans","les intendants","les ministres"], a:2},
+ {q_en:"In what year did the Court move to Versailles?", q_fr:"En quelle année la Cour s'installe-t-elle à Versailles ?", opts:["1661","1672","1682","1715"], a:2},
+ {q_en:"Why is Louis XIV nicknamed the 'Sun King' (Roi-Soleil)?", q_fr:"Pourquoi Louis XIV est-il appelé le « Roi-Soleil » ?", opts:["Il aimait le soleil","Il est né en été","Il est le centre du royaume, comme le soleil est le centre du ciel","Il portait des habits jaunes"], a:2},
+ {q_en:"Which two ministers were Louis XIV's most important advisors?", q_fr:"Quels sont les deux ministres intelligents qui entourent Louis XIV ?", opts:["Mazarin et Bossuet","Colbert et Louvois","Molière et Lully","Fouquet et Vauban"], a:1},
+ {q_en:"What did Louis XIV revoke ('cancel') in 1685?", q_fr:"Qu'est-ce que Louis XIV révoque en 1685 ?", opts:["L'édit de Nantes","Le sacre","La Fronde","La Cour"], a:0},
+ {q_en:"What happened to the Protestant religion after 1685?", q_fr:"Que devient le culte protestant après la révocation de l'édit de Nantes ?", opts:["Il devient obligatoire","Il est interdit","Il devient la religion officielle","Rien ne change"], a:1},
+ {q_en:"In what year did Louis XIV die?", q_fr:"En quelle année Louis XIV meurt-il ?", opts:["1685","1700","1715","1789"], a:2},
+ {q_en:"Who was the famous playwright protected by Louis XIV?", q_fr:"Quel écrivain et dramaturge est protégé par Louis XIV ?", opts:["Molière","Lully","Colbert","Bossuet"], a:0},
+ {q_en:"What were the king's representatives' main jobs?", q_fr:"Qui détient tous les pouvoirs sous la monarchie absolue ?", opts:["le peuple","le parlement","le roi","les nobles"], a:2},
+];
+
+const QUIZ2 = [ // Level 2 — harder, image/document based + some written-French fill-ins
+ {type:"mcq", q_en:"Looking at the diagram on p.82 (LE ROI → Conseils/Ministres → Provinces), who is at the very top, controlling everything?", q_fr:"Sur le schéma, qui est au sommet de l'organisation du pouvoir ?", opts:["Les ministres","Le roi","Les intendants","Le parlement"], a:1},
+ {type:"mcq", q_en:"In the painting of the Sacre de Louis XIV (1654) at Reims, who crowns the king?", q_fr:"Qui couronne le roi pendant la cérémonie du sacre ?", opts:["Un noble","Un évêque","Le peuple","Un ministre"], a:1},
+ {type:"mcq", q_en:"Why does Louis XIV move the Court to Versailles in 1682?", q_fr:"Pourquoi Louis XIV installe-t-il la Cour à Versailles ?", opts:["Pour être proche de la mer","Pour fuir la chaleur de Paris","Pour surveiller et contrôler la noblesse, après la Fronde","Pour se rapprocher de l'Espagne"], a:2},
+ {type:"mcq", q_en:"In the painting of the peasant family (Louis Le Nain, 1642), what tells us they are poor?", q_fr:"Que montre le tableau de Louis Le Nain sur le mode de vie des paysans ?", opts:["Des bijoux et de la soie","Une maison simple, peu de meubles, vêtements modestes","Un grand château","Des domestiques nombreux"], a:1},
+ {type:"mcq", q_en:"What is shown in the gravure about the 'dragonnade' (p.92)?", q_fr:"Qu'illustre la gravure satirique sur les dragonnades ?", opts:["Des fêtes royales","Des moyens violents pour forcer les protestants à se convertir","La construction de Versailles","Une bataille militaire"], a:1},
+ {type:"mcq", q_en:"According to Bossuet, where does the king's power come from?", q_fr:"Selon Bossuet, d'où vient le pouvoir du roi ?", opts:["Du peuple","Des nobles","De Dieu","De l'armée"], a:2},
+ {type:"mcq", q_en:"What does the Galerie des Glaces (Hall of Mirrors) mainly show off?", q_fr:"Que montre surtout la galerie des Glaces ?", opts:["La pauvreté du royaume","La richesse et la puissance du roi","La vie des paysans","Les guerres de Louis XIV"], a:1},
+ {type:"mcq", q_en:"What was Vauban's job?", q_fr:"Quel est le métier de Vauban ?", opts:["Architecte de Versailles","Ministre des Finances","Ingénieur militaire (fortifications)","Musicien du roi"], a:2},
+ {type:"fill", q_en:"Fill in the French word: a worker sent by the king to control a province is called an ______.", q_fr:"Complète : un représentant du roi dans une province s'appelle un ______.", answer:"intendant"},
+ {type:"fill", q_en:"Fill in the French word: the strict rules of daily life at Versailles are called l'______.", q_fr:"Complète : les règles strictes de la vie à la Cour s'appellent l'______.", answer:"étiquette"},
+ {type:"fill", q_en:"Fill in the French word: in 1685 Louis XIV ______ (cancels) the Edict of Nantes.", q_fr:"Complète : en 1685, Louis XIV ______ l'édit de Nantes.", answer:"révoque"},
+ {type:"fill", q_en:"Fill in the year: the Court moves to Versailles in ______.", q_fr:"Complète : la Cour s'installe à Versailles en ______.", answer:"1682"},
+ {type:"order", q_en:"Put these 5 events in correct chronological order (type the numbers 1-5, e.g. 3,1,2,5,4):", q_fr:"Classe ces événements dans l'ordre chronologique :", items:[
+    {label_en:"Death of Louis XIII", label_fr:"Mort de Louis XIII (1643)", correctPos:1},
+    {label_en:"Sacre (coronation) of Louis XIV", label_fr:"Sacre de Louis XIV (1654)", correctPos:2},
+    {label_en:"Beginning of personal rule", label_fr:"Début du gouvernement personnel (1661)", correctPos:3},
+    {label_en:"Court moves to Versailles", label_fr:"Installation de la cour à Versailles (1682)", correctPos:4},
+    {label_en:"Revocation of the Edict of Nantes", label_fr:"Révocation de l'édit de Nantes (1685)", correctPos:5},
+ ]},
+];
+
+/* ============================== STATE / STORAGE ============================== */
+const ST_KEY = "louisxiv_app_state_v1";
+function loadState(){
+  try{ return JSON.parse(localStorage.getItem(ST_KEY)) || {}; }catch(e){ return {}; }
+}
+function saveState(s){ localStorage.setItem(ST_KEY, JSON.stringify(s)); }
+let state = Object.assign({
+  badges:{}, quiz1Best:0, quiz2Best:0, flashSeen:{}, explorerSeen:{}
+}, loadState());
+
+function unlockBadge(id){
+  if(!state.badges[id]){ state.badges[id]=true; saveState(state); showToast("🏅 New badge unlocked!"); }
+}
+function showToast(msg){
+  let t=document.createElement('div');
+  t.textContent=msg;
+  t.style.position='fixed'; t.style.bottom='20px'; t.style.left='50%'; t.style.transform='translateX(-50%)';
+  t.style.background='#1e3a8a'; t.style.color='#fff'; t.style.padding='12px 22px'; t.style.borderRadius='30px';
+  t.style.boxShadow='0 4px 14px rgba(0,0,0,.3)'; t.style.zIndex=999; t.style.fontWeight='700';
+  document.body.appendChild(t);
+  setTimeout(()=>t.remove(), 2200);
+}
+
+const BADGES = [
+ {id:"flash_people", ico:"👑", name:"People Expert", desc:"Flip every People flashcard"},
+ {id:"flash_dates", ico:"📅", name:"Date Master", desc:"Flip every Dates flashcard"},
+ {id:"flash_vocab", ico:"📖", name:"Word Wizard", desc:"Flip every Vocabulary flashcard"},
+ {id:"explorer_done", ico:"🔍", name:"Textbook Detective", desc:"Open every blue-question answer"},
+ {id:"quiz1_pass", ico:"🥉", name:"Apprentice Historian", desc:"Score 10+/15 on Quiz Level 1"},
+ {id:"quiz1_perfect", ico:"🥈", name:"Royal Scholar", desc:"Score 15/15 on Quiz Level 1"},
+ {id:"quiz2_pass", ico:"🥇", name:"Court Advisor", desc:"Score 9+/12 on Quiz Level 2"},
+ {id:"quiz2_perfect", ico:"☀️", name:"Roi-Soleil Master", desc:"Score 12/12 on Quiz Level 2"},
+];
+
+/* ============================== ROUTER ============================== */
+const ROUTES = [
+ {id:"home", label:"🏠 Home"},
+ {id:"flash", label:"🃏 Flashcards"},
+ {id:"timeline", label:"📅 Timeline"},
+ {id:"explorer", label:"🔍 Explorer"},
+ {id:"quiz", label:"🧠 Quiz"},
+ {id:"badges", label:"🏅 Badges"},
+];
+function navHTML(){
+  return ROUTES.map(r=>`<button data-route="${r.id}">${r.label}</button>`).join('');
+}
+document.getElementById('nav').innerHTML = navHTML();
+document.getElementById('nav').addEventListener('click', e=>{
+  if(e.target.dataset.route) goTo(e.target.dataset.route);
+});
+
+function goTo(id){
+  document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('active', b.dataset.route===id));
+  render(id);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ============================== RENDER FUNCTIONS ============================== */
+const main = document.getElementById('main');
+
+function render(route){
+  if(route==="home") return renderHome();
+  if(route==="flash") return renderFlash();
+  if(route==="timeline") return renderTimeline();
+  if(route==="explorer") return renderExplorer();
+  if(route==="quiz") return renderQuizHome();
+  if(route==="badges") return renderBadges();
+}
+
+function renderHome(){
+  main.innerHTML = `
+   <div class="hero">
+     <div class="crown">👑☀️👑</div>
+     <h2>Louis XIV — the Sun King</h2>
+     <p><b>EN:</b> Welcome! This app helps you (and your child) revise the CM1 history chapter on Louis XIV (textbook pages 82–92).</p>
+     <p style="color:var(--purple);"><b>FR:</b> Apprenons l'histoire de Louis XIV, le Roi-Soleil !</p>
+   </div>
+   <div class="parent-note">
+     <b>👋 Note for the grown-up:</b> Every card below shows the topic explained in <b>English</b> (so you can read &amp; teach it),
+     plus the key words/answers she must learn to <b>write correctly in French</b> (shown in purple, with spelling broken down).
+     Start with <b>Flashcards</b> (Level 1 — direct facts), then explore the <b>Explorer</b> tab (real textbook "blue questions"),
+     then test her with the two <b>Quiz</b> levels. Badges unlock as she progresses — check the <b>Badges</b> tab for her trophy wall!
+   </div>
+   <div class="card-grid">
+     <div class="tile" onclick="goTo('flash')"><span class="pill">Step 1</span><h3>🃏 Flashcards</h3><p>People, Dates, Vocabulary &amp; Places — flip to learn, EN front / FR back.</p></div>
+     <div class="tile" onclick="goTo('timeline')"><span class="pill">Step 2</span><h3>📅 Timeline</h3><p>The whole reign of Louis XIV, year by year, illustrated.</p></div>
+     <div class="tile" onclick="goTo('explorer')"><span class="pill">Step 3</span><h3>🔍 Explorer</h3><p>The real "blue questions" from the textbook pages, with model answers.</p></div>
+     <div class="tile" onclick="goTo('quiz')"><span class="pill">Step 4</span><h3>🧠 Quiz</h3><p>Level 1 = easy recall. Level 2 = harder, image &amp; document based + spelling.</p></div>
+     <div class="tile" onclick="goTo('badges')"><span class="pill">Step 5</span><h3>🏅 Badges</h3><p>Track her progress and trophies.</p></div>
+   </div>
+  `;
+}
+
+/* ---- FLASHCARDS ---- */
+let currentDeck = "people";
+function renderFlash(){
+  main.innerHTML = `
+   <h2>🃏 Flashcards — Level 1 (direct facts)</h2>
+   <p><b>EN:</b> Click a card to flip it. Front = question/topic (English). Back = the fact, with the French word/name she needs to know &amp; how to spell it.</p>
+   <div class="deck-tabs" id="deckTabs">
+     <button data-deck="people" class="active">👑 People</button>
+     <button data-deck="dates">📅 Dates</button>
+     <button data-deck="vocab">📖 Vocabulary</button>
+     <button data-deck="places">🏛️ Places</button>
+   </div>
+   <div class="flash-area" id="flashArea"></div>
+  `;
+  document.getElementById('deckTabs').addEventListener('click', e=>{
+    if(!e.target.dataset.deck) return;
+    currentDeck = e.target.dataset.deck;
+    document.querySelectorAll('#deckTabs button').forEach(b=>b.classList.toggle('active', b.dataset.deck===currentDeck));
+    drawDeck();
+  });
+  drawDeck();
+}
+function drawDeck(){
+  const area = document.getElementById('flashArea');
+  let data, frontFn, backFn, key;
+  if(currentDeck==="people"){
+    data=PEOPLE; key="people";
+    frontFn=p=>`<div class="tag">${p.tag}</div><div class="icon" style="font-size:2rem;">${p.icon}</div><div class="main">Who is this?</div>`;
+    backFn=p=>`<div class="tag">FR name</div><div class="main">${p.fr}</div><div class="sub">${p.en}</div>`;
+  } else if(currentDeck==="dates"){
+    data=TIMELINE; key="dates";
+    frontFn=p=>`<div class="tag">Year</div><div class="main" style="font-size:2rem;">${p.year}</div><div class="hint">What happened?</div>`;
+    backFn=p=>`<div class="tag">FR</div><div class="sub" style="color:#3a2400;">${p.fr}</div><div class="hint" style="color:#3a2400;">${p.en}</div>`;
+  } else if(currentDeck==="vocab"){
+    data=VOCAB; key="vocab";
+    frontFn=p=>`<div class="tag">English meaning</div><div class="main" style="font-size:.95rem;">${p.en}</div>`;
+    backFn=p=>`<div class="tag">French word — spell it!</div><div class="main">${p.fr}</div><div class="sub">${p.spell}</div>`;
+  } else {
+    data=PLACES; key="places";
+    frontFn=p=>`<div class="icon" style="font-size:2rem;">${p.icon}</div><div class="main">Where / what is this?</div>`;
+    backFn=p=>`<div class="tag">FR</div><div class="main">${p.fr}</div><div class="sub">${p.en}</div>`;
+  }
+  area.innerHTML = data.map((p,i)=>`
+    <div class="flashcard" data-i="${i}">
+      <div class="inner">
+        <div class="face front">${frontFn(p)}</div>
+        <div class="face back">${backFn(p)}</div>
+      </div>
+    </div>
+  `).join('');
+  area.querySelectorAll('.flashcard').forEach(card=>{
+    card.addEventListener('click', ()=>{
+      card.classList.toggle('flipped');
+      const i = card.dataset.i;
+      state.flashSeen[key] = state.flashSeen[key]||{};
+      state.flashSeen[key][i]=true;
+      saveState(state);
+      checkDeckBadge(key, data.length);
+    });
+  });
+}
+function checkDeckBadge(key, total){
+  const seen = state.flashSeen[key] ? Object.keys(state.flashSeen[key]).length : 0;
+  if(seen>=total){
+    if(key==="people") unlockBadge("flash_people");
+    if(key==="dates") unlockBadge("flash_dates");
+    if(key==="vocab") unlockBadge("flash_vocab");
+  }
+}
+
+/* ---- TIMELINE ---- */
+function renderTimeline(){
+  main.innerHTML = `
+   <h2>📅 The Reign of Louis XIV — Timeline</h2>
+   <p><b>EN:</b> Read top to bottom. Practice saying the year, then the French sentence.</p>
+   <div class="timeline">
+     ${TIMELINE.map(t=>`
+       <div class="tl-item">
+         <div class="tl-year">${t.year}</div>
+         <div class="tl-en">${t.en}</div>
+         <div class="tl-fr">🇫🇷 ${t.fr}</div>
+       </div>
+     `).join('')}
+   </div>
+  `;
+}
+
+/* ---- EXPLORER ---- */
+function renderExplorer(){
+  main.innerHTML = `
+   <h2>🔍 Textbook Explorer — Level 2</h2>
+   <p><b>EN:</b> These are the actual "blue questions" from the textbook (pages 82–92), next to the document/image they refer to.
+   Read the question in French, try to answer out loud, then click to reveal the model answer.</p>
+   <div id="expList"></div>
+  `;
+  const list = document.getElementById('expList');
+  list.innerHTML = EXPLORER.map((q,i)=>`
+    <div class="qcard">
+      <span class="pagetag">p. ${q.page}</span>
+      <div class="img-illustration">${q.img}</div>
+      <div class="frq">🇫🇷 ${q.fr}</div>
+      <div class="enq">EN: ${q.en}</div>
+      <button class="toggle-ans" data-i="${i}">Show model answer / Voir la réponse</button>
+      <div class="answer" id="ans${i}"><b>✅ FR:</b> ${q.ans}</div>
+    </div>
+  `).join('');
+  list.querySelectorAll('.toggle-ans').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const i = btn.dataset.i;
+      document.getElementById('ans'+i).classList.toggle('show');
+      state.explorerSeen[i]=true; saveState(state);
+      if(Object.keys(state.explorerSeen).length>=EXPLORER.length) unlockBadge("explorer_done");
+    });
+  });
+}
+
+/* ---- QUIZ ---- */
+let quizState = null;
+function renderQuizHome(){
+  main.innerHTML = `
+   <h2>🧠 Quiz Time</h2>
+   <p><b>EN:</b> Choose a level. Level 1 = direct recall (multiple choice). Level 2 = harder — image/document-based + typing French spelling + ordering events.</p>
+   <div class="level-select" id="lvlSelect">
+     <button data-lvl="1">🌟 Level 1<br><small>Direct facts (15 Q)</small></button>
+     <button data-lvl="2">🔥 Level 2<br><small>Fun &amp; tricky (12 Q)</small></button>
+   </div>
+   <div id="quizHost"></div>
+  `;
+  document.getElementById('lvlSelect').addEventListener('click', e=>{
+    const b = e.target.closest('button'); if(!b) return;
+    document.querySelectorAll('#lvlSelect button').forEach(x=>x.classList.toggle('active', x===b));
+    startQuiz(parseInt(b.dataset.lvl));
+  });
+}
+function startQuiz(lvl){
+  quizState = {lvl, idx:0, score:0, total: lvl===1?QUIZ1.length:QUIZ2.length};
+  drawQuizQuestion();
+}
+function normalize(str){
+  return str.toLowerCase().trim().normalize('NFD').replace(/[̀-ͯ]/g,'');
+}
+function drawQuizQuestion(){
+  const host = document.getElementById('quizHost');
+  const set = quizState.lvl===1 ? QUIZ1 : QUIZ2;
+  if(quizState.idx >= set.length){ return drawQuizSummary(); }
+  const q = set[quizState.idx];
+  let bodyHTML = "";
+
+  if(quizState.lvl===1 || q.type==="mcq"){
+    bodyHTML = `<div class="options">${q.opts.map((o,i)=>`<button class="opt" data-i="${i}">${o}</button>`).join('')}</div>`;
+  } else if(q.type==="fill"){
+    bodyHTML = `<div class="fillrow"><input type="text" id="fillInput" placeholder="Écris ta réponse en français..."><button id="fillBtn">Valider</button></div>`;
+  } else if(q.type==="order"){
+    bodyHTML = `<div class="options">` + q.items.map((it,i)=>`
+        <div style="display:flex; gap:8px; align-items:center;">
+          <input type="number" min="1" max="${q.items.length}" style="width:50px; padding:6px; border-radius:8px; border:2px solid var(--purple);" data-i="${i}" class="orderInput">
+          <span>${it.label_fr} <i style="color:#888;">(${it.label_en})</i></span>
+        </div>`).join('') + `</div><button class="nextbtn" id="orderSubmit" style="margin-top:14px;">Valider l'ordre</button>`;
+  }
+
+  host.innerHTML = `
+    <div class="quiz-box">
+      <div class="qprog">Question ${quizState.idx+1} / ${set.length} — Score: ${quizState.score}</div>
+      <div class="qtext-en">${q.q_en}</div>
+      <div class="qtext-fr">🇫🇷 ${q.q_fr}</div>
+      ${bodyHTML}
+      <div id="qFeedback"></div>
+    </div>
+  `;
+
+  if(quizState.lvl===1 || q.type==="mcq"){
+    host.querySelectorAll('.opt').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        host.querySelectorAll('.opt').forEach(b=>b.disabled=true);
+        const correct = parseInt(btn.dataset.i)===q.a;
+        btn.classList.add(correct?'correct':'wrong');
+        if(!correct) host.querySelectorAll('.opt')[q.a].classList.add('correct');
+        if(correct) quizState.score++;
+        feedbackAndNext(correct, q.opts ? q.opts[q.a] : "");
+      });
+    });
+  } else if(q.type==="fill"){
+    const submit = ()=>{
+      const val = document.getElementById('fillInput').value;
+      const correct = normalize(val)===normalize(q.answer);
+      if(correct) quizState.score++;
+      feedbackAndNext(correct, q.answer);
+    };
+    document.getElementById('fillBtn').addEventListener('click', submit);
+    document.getElementById('fillInput').addEventListener('keypress', e=>{ if(e.key==='Enter') submit(); });
+  } else if(q.type==="order"){
+    document.getElementById('orderSubmit').addEventListener('click', ()=>{
+      const inputs = host.querySelectorAll('.orderInput');
+      let correctCount=0;
+      inputs.forEach((inp,i)=>{
+        const val = parseInt(inp.value);
+        if(val===q.items[i].correctPos) correctCount++;
+      });
+      const allCorrect = correctCount===q.items.length;
+      if(allCorrect) quizState.score++;
+      const correctOrderText = q.items.map(it=>it.correctPos+". "+it.label_fr).join(' | ');
+      feedbackAndNext(allCorrect, correctOrderText);
+    });
+  }
+}
+function feedbackAndNext(correct, correctAnswerText){
+  const fb = document.getElementById('qFeedback');
+  fb.innerHTML = `
+    <div class="feedback ${correct?'ok':'bad'}">
+      ${correct ? "✅ Correct ! Bravo !" : `❌ Pas tout à fait. Réponse correcte : <b>${correctAnswerText}</b>`}
+    </div>
+    <button class="nextbtn" id="nextQ">Suivant ➜ Next</button>
+  `;
+  document.getElementById('nextQ').addEventListener('click', ()=>{
+    quizState.idx++;
+    drawQuizQuestion();
+  });
+}
+function drawQuizSummary(){
+  const host = document.getElementById('quizHost');
+  const pct = Math.round(100*quizState.score/quizState.total);
+  host.innerHTML = `
+    <div class="quiz-box scoreboard">
+      <div class="big">${quizState.score===quizState.total ? "🏆" : pct>=60 ? "🎉" : "💪"}</div>
+      <h2>Score: ${quizState.score} / ${quizState.total} (${pct}%)</h2>
+      <p>${pct===100 ? "Perfect! Roi-Soleil level achieved!" : pct>=60 ? "Great job — keep practicing!" : "Good try — revise the Flashcards &amp; Explorer, then try again!"}</p>
+      <button class="nextbtn" onclick="renderQuizHome()">⬅ Back to quiz menu</button>
+    </div>
+  `;
+  if(quizState.lvl===1){
+    state.quiz1Best = Math.max(state.quiz1Best||0, quizState.score);
+    if(quizState.score>=10) unlockBadge("quiz1_pass");
+    if(quizState.score>=quizState.total) unlockBadge("quiz1_perfect");
+  } else {
+    state.quiz2Best = Math.max(state.quiz2Best||0, quizState.score);
+    if(quizState.score>=9) unlockBadge("quiz2_pass");
+    if(quizState.score>=quizState.total) unlockBadge("quiz2_perfect");
+  }
+  saveState(state);
+}
+
+/* ---- BADGES ---- */
+function renderBadges(){
+  const unlockedCount = Object.keys(state.badges).length;
+  const pct = Math.round(100*unlockedCount/BADGES.length);
+  main.innerHTML = `
+   <h2>🏅 Badge Wall</h2>
+   <p>Progress: ${unlockedCount}/${BADGES.length} badges unlocked</p>
+   <div class="progressbar"><div class="fill" style="width:${pct}%"></div></div>
+   <p>Best Quiz Level 1 score: <b>${state.quiz1Best||0} / ${QUIZ1.length}</b> &nbsp;|&nbsp; Best Quiz Level 2 score: <b>${state.quiz2Best||0} / ${QUIZ2.length}</b></p>
+   <div class="badge-grid">
+     ${BADGES.map(b=>`
+       <div class="badge ${state.badges[b.id]?'unlocked':''}">
+         <div class="ico">${state.badges[b.id]?b.ico:'🔒'}</div>
+         <h4>${b.name}</h4>
+         <p>${b.desc}</p>
+       </div>
+     `).join('')}
+   </div>
+  `;
+}
+
+/* ============================== INIT ============================== */
+goTo('home');
+</script>
+</body>
+</html>
