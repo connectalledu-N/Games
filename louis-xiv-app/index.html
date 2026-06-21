@@ -102,6 +102,9 @@ main{max-width:1000px; margin:0 auto; padding:20px 14px 60px;}
   border-radius:12px; padding:14px; margin-bottom:10px; color:#fff; font-weight:600; text-align:center;
   background:linear-gradient(135deg,var(--blue),var(--purple));
 }
+.qcard .photo-wrap{margin-bottom:10px;}
+.qcard .photo-wrap img{width:100%; max-height:320px; object-fit:contain; border-radius:12px; border:3px solid var(--gold); background:#222;}
+.qcard .photo-caption{font-size:.75rem; color:#666; text-align:center; margin-top:4px;}
 
 /* QUIZ */
 .level-select{display:flex; gap:10px; margin-bottom:16px; flex-wrap:wrap;}
@@ -210,26 +213,26 @@ const PLACES = [
 
 /* Blue textbook questions ("Level 2" explorer) — with page reference, FR question (as in book), EN explanation + model FR answer */
 const EXPLORER = [
- {page:82, img:"🟦 Schéma : LE ROI → Les Conseils / Les Ministres → Provinces du Royaume", fr:"Que montre ce schéma sur la répartition du pouvoir sous Louis XIV ?", en:"What does this diagram show about how power was shared under Louis XIV?", ans:"Tout part du roi : il commande les conseils, les ministres et contrôle les provinces grâce aux intendants. Tout le pouvoir vient de lui."},
+ {page:82, imgFile:"p82_schema_pouvoir.jpg", img:"🟦 Schéma : LE ROI → Les Conseils / Les Ministres → Provinces du Royaume", fr:"Que montre ce schéma sur la répartition du pouvoir sous Louis XIV ?", en:"What does this diagram show about how power was shared under Louis XIV?", ans:"Tout part du roi : il commande les conseils, les ministres et contrôle les provinces grâce aux intendants. Tout le pouvoir vient de lui."},
  {page:82, img:"🟨 Texte : Louis XIV, Mémoires pour l'instruction du Dauphin", fr:"Pourquoi Louis XIV ne veut-il pas prendre de Premier ministre ?", en:"Why doesn't Louis XIV want to have a Prime Minister?", ans:"Parce qu'il veut garder TOUT le pouvoir pour lui seul : avoir un Premier ministre serait partager son autorité."},
  {page:82, img:"📜 Document : une lettre de cachet", fr:"Pourquoi la lettre de cachet est-elle un symbole de la monarchie absolue ?", en:"Why is the 'lettre de cachet' a symbol of absolute monarchy?", ans:"Parce qu'avec une simple lettre signée par le roi, on peut emprisonner quelqu'un sans procès : le roi décide seul, sans justice ni jugement."},
- {page:83, img:"🖼️ Tapisserie : Le Sacre de Louis XIV à Reims, 1654", fr:"Que signifie la présence de ces différents personnages (à la cérémonie du sacre) ?", en:"What does the presence of all these different people at the coronation mean?", ans:"Cela montre l'importance de la cérémonie : nobles, évêques et représentants de l'Église sont réunis pour bénir et reconnaître le roi comme représentant de Dieu sur Terre."},
+ {page:83, imgFile:"p83_sacre_reims.jpg", img:"🖼️ Tapisserie : Le Sacre de Louis XIV à Reims, 1654", fr:"Que signifie la présence de ces différents personnages (à la cérémonie du sacre) ?", en:"What does the presence of all these different people at the coronation mean?", ans:"Cela montre l'importance de la cérémonie : nobles, évêques et représentants de l'Église sont réunis pour bénir et reconnaître le roi comme représentant de Dieu sur Terre."},
  {page:83, img:"🟨 Texte : Bossuet, Politique tirée de l'Écriture sainte", fr:"Quel est le rôle du roi (ou des princes) selon Bossuet ?", en:"According to Bossuet, what is the king's role?", ans:"Selon Bossuet, le roi agit comme le ministre de Dieu sur Terre : le trône royal est en réalité le trône de Dieu lui-même."},
- {page:84, img:"🖼️ Peinture : Louis XIV entouré de courtisans, 1713", fr:"Compare l'attitude du roi et celle des courtisans. Que peux-tu en déduire ?", en:"Compare the king's attitude with the courtiers'. What can you conclude?", ans:"Le roi est détendu, au centre ; les courtisans se penchent vers lui, attentifs. On voit que tout tourne autour du roi et que les nobles cherchent à lui plaire."},
- {page:84, img:"🗺️ Plan du château de Versailles", fr:"Où se situe la chambre du roi ? Qu'est-ce que cela montre ?", en:"Where is the king's bedroom located? What does this show?", ans:"La chambre du roi est au centre exact du château, sur l'axe de symétrie. Cela montre que le roi est le centre de tout le royaume."},
+ {page:84, imgFile:"p84_courtisans.jpg", img:"🖼️ Peinture : Louis XIV entouré de courtisans, 1713", fr:"Compare l'attitude du roi et celle des courtisans. Que peux-tu en déduire ?", en:"Compare the king's attitude with the courtiers'. What can you conclude?", ans:"Le roi est détendu, au centre ; les courtisans se penchent vers lui, attentifs. On voit que tout tourne autour du roi et que les nobles cherchent à lui plaire."},
+ {page:84, imgFile:"p84_plan_versailles.jpg", img:"🗺️ Plan du château de Versailles", fr:"Où se situe la chambre du roi ? Qu'est-ce que cela montre ?", en:"Where is the king's bedroom located? What does this show?", ans:"La chambre du roi est au centre exact du château, sur l'axe de symétrie. Cela montre que le roi est le centre de tout le royaume."},
  {page:84, img:"📋 Emploi du temps du roi (7h30 Réveil → 23h00 Coucher)", fr:"En quoi un emploi du temps si précis permet à Louis XIV de contrôler la noblesse ?", en:"How does such a precise schedule help Louis XIV control the nobility?", ans:"Comme les nobles doivent assister à chaque moment de la journée du roi (lever, messe, coucher...), ils restent occupés près de lui et ne peuvent pas comploter ailleurs."},
  {page:85, img:"🟨 Texte : Louis XIV sur l'intérêt des spectacles", fr:"À quoi servent les spectacles selon Louis XIV ?", en:"What are the royal shows/parties for, according to Louis XIV?", ans:"Les spectacles servent à plaire au peuple (pour gagner son cœur) et à impressionner les souverains étrangers en montrant la richesse et la puissance du royaume."},
- {page:85, img:"🪞 La galerie des Glaces", fr:"Décris la galerie des Glaces. En quoi symbolise-t-elle la puissance du roi ?", en:"Describe the Hall of Mirrors. How does it symbolize the king's power?", ans:"C'est une immense galerie couverte de miroirs et de dorures, avec un plafond peint. Son luxe extraordinaire montre la richesse et la grandeur du Roi-Soleil."},
- {page:88, img:"🎻 Allégorie à Louis XIV, protecteur des Arts et des Sciences", fr:"Quels sont les domaines représentés ici ?", en:"Which fields/areas are represented in this painting?", ans:"La musique, la peinture, les sciences et la littérature : Louis XIV protège et finance les arts et les sciences."},
- {page:88, img:"🏭 Visite de Louis XIV à la manufacture des Gobelins, 1667", fr:"Que produisait cette célèbre manufacture ? À quoi cela servait-il ?", en:"What did this famous workshop produce, and what was it used for?", ans:"La manufacture des Gobelins produisait des tapisseries de très grande qualité, utilisées pour décorer les palais royaux et montrer le savoir-faire français."},
- {page:89, img:"🗺️ Carte : l'agrandissement du royaume sous Louis XIV", fr:"Quels sont les territoires gagnés par Louis XIV ?", en:"Which territories did Louis XIV gain for France?", ans:"La Flandre, l'Artois, le Hainaut, l'Alsace, la Franche-Comté et le Roussillon."},
- {page:89, img:"🏝️ Citadelle de Belle-Île-en-mer (fortifiée par Vauban)", fr:"À quoi peut servir une telle construction ?", en:"What is such a fortified construction used for?", ans:"Cette citadelle sert à protéger la côte et le territoire français contre des attaques ennemies venues de la mer."},
- {page:90, img:"🖼️ Louis Le Nain, Famille de paysans dans un intérieur, 1642", fr:"Observe les personnages et le décor du tableau. Que peux-tu en conclure sur leur mode de vie ?", en:"Look at the people and setting in the painting. What can you conclude about their way of life?", ans:"Les vêtements simples, la maison sombre avec peu de meubles et la nourriture pauvre montrent que cette famille de paysans vit dans des conditions modestes et difficiles."},
- {page:90, img:"🖼️ Nicolas de Largillière, Portrait de la famille du maréchal de Noailles, 1689", fr:"Quels signes de richesse observes-tu sur ce tableau ?", en:"What signs of wealth do you see in this painting?", ans:"Les beaux habits brodés, les bijoux, le décor luxueux, le château et les animaux de compagnie (chiens) montrent la grande richesse de cette famille noble."},
+ {page:85, imgFile:"p85_galerie_glaces.jpg", img:"🪞 La galerie des Glaces", fr:"Décris la galerie des Glaces. En quoi symbolise-t-elle la puissance du roi ?", en:"Describe the Hall of Mirrors. How does it symbolize the king's power?", ans:"C'est une immense galerie couverte de miroirs et de dorures, avec un plafond peint. Son luxe extraordinaire montre la richesse et la grandeur du Roi-Soleil."},
+ {page:88, imgFile:"p88_allegorie_arts.jpg", img:"🎻 Allégorie à Louis XIV, protecteur des Arts et des Sciences", fr:"Quels sont les domaines représentés ici ?", en:"Which fields/areas are represented in this painting?", ans:"La musique, la peinture, les sciences et la littérature : Louis XIV protège et finance les arts et les sciences."},
+ {page:88, imgFile:"p88_gobelins.jpg", img:"🏭 Visite de Louis XIV à la manufacture des Gobelins, 1667", fr:"Que produisait cette célèbre manufacture ? À quoi cela servait-il ?", en:"What did this famous workshop produce, and what was it used for?", ans:"La manufacture des Gobelins produisait des tapisseries de très grande qualité, utilisées pour décorer les palais royaux et montrer le savoir-faire français."},
+ {page:89, imgFile:"p89_carte_royaume.jpg", img:"🗺️ Carte : l'agrandissement du royaume sous Louis XIV", fr:"Quels sont les territoires gagnés par Louis XIV ?", en:"Which territories did Louis XIV gain for France?", ans:"La Flandre, l'Artois, le Hainaut, l'Alsace, la Franche-Comté et le Roussillon."},
+ {page:89, imgFile:"p89_belle_ile.jpg", img:"🏝️ Citadelle de Belle-Île-en-mer (fortifiée par Vauban)", fr:"À quoi peut servir une telle construction ?", en:"What is such a fortified construction used for?", ans:"Cette citadelle sert à protéger la côte et le territoire français contre des attaques ennemies venues de la mer."},
+ {page:90, imgFile:"p90_paysans.jpg", img:"🖼️ Louis Le Nain, Famille de paysans dans un intérieur, 1642", fr:"Observe les personnages et le décor du tableau. Que peux-tu en conclure sur leur mode de vie ?", en:"Look at the people and setting in the painting. What can you conclude about their way of life?", ans:"Les vêtements simples, la maison sombre avec peu de meubles et la nourriture pauvre montrent que cette famille de paysans vit dans des conditions modestes et difficiles."},
+ {page:90, imgFile:"p90_famille_noailles.jpg", img:"🖼️ Nicolas de Largillière, Portrait de la famille du maréchal de Noailles, 1689", fr:"Quels signes de richesse observes-tu sur ce tableau ?", en:"What signs of wealth do you see in this painting?", ans:"Les beaux habits brodés, les bijoux, le décor luxueux, le château et les animaux de compagnie (chiens) montrent la grande richesse de cette famille noble."},
  {page:91, img:"🟨 Texte : Jean Héroard, Journal sur l'enfance et la jeunesse de Louis XIII", fr:"À quel âge Louis XIII a-t-il été lavé avec de l'eau pour la première fois ?", en:"At what age was Louis XIII first washed with water?", ans:"Il avait environ 5 ans (le 3 octobre 1606, né en 1601) — l'hygiène à l'époque était très limitée."},
  {page:91, img:"🎭 Molière, Le Médecin malgré lui, 1666", fr:"Que penses-tu des soins proposés par Sganarelle ?", en:"What do you think of the treatment Sganarelle suggests?", ans:"C'est un faux remède (du pain trempé dans du vin) : cela montre que la médecine du XVIIe siècle était souvent peu sérieuse et hasardeuse."},
- {page:91, img:"🩺 Gravure : Le tout par précaution (médecine, XVIIIe siècle)", fr:"Comment les médecins soignent-ils la malade ?", en:"How are the doctors treating the sick woman in this engraving?", ans:"Ils pratiquent une saignée (ils lui prélèvent du sang) — un traitement très courant mais peu efficace et parfois dangereux au XVIIe siècle."},
- {page:92, img:"🖼️ Gravure satirique : moyens pour ramener les hérétiques à la foi catholique, 1679", fr:"Quels sont les moyens utilisés pour obliger les protestants à se convertir ?", en:"What methods were used to force Protestants to convert?", ans:"Le supplice de la roue et la condamnation aux galères — des punitions très violentes pour effrayer les protestants."},
+ {page:91, imgFile:"p91_medecine.jpg", img:"🩺 Gravure : Le tout par précaution (médecine, XVIIIe siècle)", fr:"Comment les médecins soignent-ils la malade ?", en:"How are the doctors treating the sick woman in this engraving?", ans:"Ils pratiquent une saignée (ils lui prélèvent du sang) — un traitement très courant mais peu efficace et parfois dangereux au XVIIe siècle."},
+ {page:92, imgFile:"p92_dragonnade.jpg", img:"🖼️ Gravure satirique : moyens pour ramener les hérétiques à la foi catholique, 1679", fr:"Quels sont les moyens utilisés pour obliger les protestants à se convertir ?", en:"What methods were used to force Protestants to convert?", ans:"Le supplice de la roue et la condamnation aux galères — des punitions très violentes pour effrayer les protestants."},
  {page:92, img:"📜 Récit d'une dragonnade, Abraham Papot, 1685", fr:"Qu'est-ce qu'une « dragonnade » ?", en:"What is a 'dragonnade'?", ans:"C'est quand des soldats (les dragons) sont logés par la force chez des protestants et les menacent violemment pour les forcer à se convertir au catholicisme."},
 ];
 
@@ -306,6 +309,8 @@ const BADGES = [
  {id:"quiz1_perfect", ico:"🥈", name:"Royal Scholar", desc:"Score 15/15 on Quiz Level 1"},
  {id:"quiz2_pass", ico:"🥇", name:"Court Advisor", desc:"Score 9+/12 on Quiz Level 2"},
  {id:"quiz2_perfect", ico:"☀️", name:"Roi-Soleil Master", desc:"Score 12/12 on Quiz Level 2"},
+ {id:"dictation_pass", ico:"✍️", name:"Careful Speller", desc:"Spell 10+/18 words correctly in Dictation"},
+ {id:"dictation_perfect", ico:"🖋️", name:"Perfect Scribe", desc:"Spell all 18 words correctly in Dictation"},
 ];
 
 /* ============================== ROUTER ============================== */
@@ -315,6 +320,7 @@ const ROUTES = [
  {id:"timeline", label:"📅 Timeline"},
  {id:"explorer", label:"🔍 Explorer"},
  {id:"quiz", label:"🧠 Quiz"},
+ {id:"dictation", label:"✍️ Dictation"},
  {id:"badges", label:"🏅 Badges"},
 ];
 function navHTML(){
@@ -340,6 +346,7 @@ function render(route){
   if(route==="timeline") return renderTimeline();
   if(route==="explorer") return renderExplorer();
   if(route==="quiz") return renderQuizHome();
+  if(route==="dictation") return renderDictationHome();
   if(route==="badges") return renderBadges();
 }
 
@@ -362,7 +369,8 @@ function renderHome(){
      <div class="tile" onclick="goTo('timeline')"><span class="pill">Step 2</span><h3>📅 Timeline</h3><p>The whole reign of Louis XIV, year by year, illustrated.</p></div>
      <div class="tile" onclick="goTo('explorer')"><span class="pill">Step 3</span><h3>🔍 Explorer</h3><p>The real "blue questions" from the textbook pages, with model answers.</p></div>
      <div class="tile" onclick="goTo('quiz')"><span class="pill">Step 4</span><h3>🧠 Quiz</h3><p>Level 1 = easy recall. Level 2 = harder, image &amp; document based + spelling.</p></div>
-     <div class="tile" onclick="goTo('badges')"><span class="pill">Step 5</span><h3>🏅 Badges</h3><p>Track her progress and trophies.</p></div>
+     <div class="tile" onclick="goTo('dictation')"><span class="pill">Step 5</span><h3>✍️ Dictation</h3><p>You read the English meaning out loud, she writes the French word — checks her spelling.</p></div>
+     <div class="tile" onclick="goTo('badges')"><span class="pill">Step 6</span><h3>🏅 Badges</h3><p>Track her progress and trophies.</p></div>
    </div>
   `;
 }
@@ -466,7 +474,7 @@ function renderExplorer(){
   list.innerHTML = EXPLORER.map((q,i)=>`
     <div class="qcard">
       <span class="pagetag">p. ${q.page}</span>
-      <div class="img-illustration">${q.img}</div>
+      ${q.imgFile ? `<div class="photo-wrap"><img src="images/${q.imgFile}" alt="${q.img}" loading="lazy"><div class="photo-caption">${q.img}</div></div>` : `<div class="img-illustration">${q.img}</div>`}
       <div class="frq">🇫🇷 ${q.fr}</div>
       <div class="enq">EN: ${q.en}</div>
       <button class="toggle-ans" data-i="${i}">Show model answer / Voir la réponse</button>
@@ -604,6 +612,88 @@ function drawQuizSummary(){
     state.quiz2Best = Math.max(state.quiz2Best||0, quizState.score);
     if(quizState.score>=9) unlockBadge("quiz2_pass");
     if(quizState.score>=quizState.total) unlockBadge("quiz2_perfect");
+  }
+  saveState(state);
+}
+
+/* ---- DICTATION ---- */
+let dictState = null;
+function renderDictationHome(){
+  main.innerHTML = `
+   <h2>✍️ Dictation — Words to Learn</h2>
+   <p><b>EN:</b> Read the English meaning out loud to Joshi (or say the French word yourself), then she types the French spelling. Accents are checked but small accent mistakes are still marked, so she learns them properly.</p>
+   <p class="parent-note">👋 <b>How to use it:</b> Cover the French word, read only the <b>EN</b> clue. She writes the French word in the box. Click "Check" to see if the spelling is correct.</p>
+   <div class="level-select" id="dictSelect">
+     <button data-mode="full">📝 Full list (18 words)</button>
+     <button data-mode="short">⚡ Quick 8 (random)</button>
+   </div>
+   <div id="dictHost"></div>
+  `;
+  document.getElementById('dictSelect').addEventListener('click', e=>{
+    const b = e.target.closest('button'); if(!b) return;
+    document.querySelectorAll('#dictSelect button').forEach(x=>x.classList.toggle('active', x===b));
+    startDictation(b.dataset.mode);
+  });
+}
+function startDictation(mode){
+  let words = VOCAB.slice();
+  if(mode==="short"){
+    words = words.sort(()=>Math.random()-0.5).slice(0,8);
+  }
+  dictState = {words, idx:0, score:0, mistakes:[]};
+  drawDictWord();
+}
+function drawDictWord(){
+  const host = document.getElementById('dictHost');
+  if(dictState.idx >= dictState.words.length){ return drawDictSummary(); }
+  const w = dictState.words[dictState.idx];
+  host.innerHTML = `
+    <div class="quiz-box">
+      <div class="qprog">Word ${dictState.idx+1} / ${dictState.words.length} — Score: ${dictState.score}</div>
+      <div class="qtext-en">EN clue: ${w.en}</div>
+      <div class="qtext-fr">🔊 Say it / spell it out loud first: <i>${w.spell}</i></div>
+      <div class="fillrow"><input type="text" id="dictInput" placeholder="Écris le mot en français..." autocomplete="off"><button id="dictBtn">Check</button></div>
+      <div id="dFeedback"></div>
+    </div>
+  `;
+  const input = document.getElementById('dictInput');
+  input.focus();
+  const submit = ()=>{
+    const val = input.value;
+    const correct = normalize(val)===normalize(w.fr);
+    if(correct) dictState.score++;
+    else dictState.mistakes.push(w.fr);
+    const fb = document.getElementById('dFeedback');
+    fb.innerHTML = `
+      <div class="feedback ${correct?'ok':'bad'}">
+        ${correct ? "✅ Correct ! Bravo !" : `❌ Pas tout à fait. La bonne orthographe est : <b>${w.fr}</b>`}
+      </div>
+      <button class="nextbtn" id="nextW">Suivant ➜ Next</button>
+    `;
+    input.disabled = true; document.getElementById('dictBtn').disabled = true;
+    document.getElementById('nextW').addEventListener('click', ()=>{
+      dictState.idx++;
+      drawDictWord();
+    });
+  };
+  document.getElementById('dictBtn').addEventListener('click', submit);
+  input.addEventListener('keypress', e=>{ if(e.key==='Enter') submit(); });
+}
+function drawDictSummary(){
+  const host = document.getElementById('dictHost');
+  const total = dictState.words.length;
+  const pct = Math.round(100*dictState.score/total);
+  host.innerHTML = `
+    <div class="quiz-box scoreboard">
+      <div class="big">${dictState.score===total ? "🏆" : pct>=60 ? "🎉" : "💪"}</div>
+      <h2>Score: ${dictState.score} / ${total} (${pct}%)</h2>
+      ${dictState.mistakes.length ? `<p>Words to practice again: <b>${dictState.mistakes.join(', ')}</b></p>` : `<p>Perfect spelling — amazing!</p>`}
+      <button class="nextbtn" onclick="renderDictationHome()">⬅ Back to dictation menu</button>
+    </div>
+  `;
+  if(total>=18){
+    if(dictState.score>=10) unlockBadge("dictation_pass");
+    if(dictState.score>=total) unlockBadge("dictation_perfect");
   }
   saveState(state);
 }
