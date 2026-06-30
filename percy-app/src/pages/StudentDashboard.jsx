@@ -8,10 +8,10 @@ const SUBJECTS = [
   { id: 'mythology', label: 'Myth Academy', icon: '🏛️', color: '#9B72CF', bg: 'from-purple-900 to-purple-800', desc: 'Gods · Greek vs Roman · Great Myths', badge: '3 quizzes + God Cards' },
   { id: 'science', label: 'Science Lab', icon: '🔬', color: '#4ade80', bg: 'from-green-900 to-green-800', desc: 'Zeus & Weather · Poseidon & Oceans · Constellations', badge: '3 labs' },
   { id: 'craft', label: 'Craft Workshop', icon: '🎨', color: '#F472B6', bg: 'from-pink-900 to-pink-800', desc: 'Camp map · Shield · Comic · Diorama', badge: '4 projects' },
-  { id: 'game', label: 'Quest Runner', icon: '🎮', color: '#FB923C', bg: 'from-orange-900 to-orange-800', desc: 'Side-scrolling runner · Jump · Dodge · Quiz mode', badge: 'Mini game' },
+  { id: 'game', label: 'Labyrinth Game', icon: '🎮', color: '#FB923C', bg: 'from-orange-900 to-orange-800', desc: 'Top-down maze · Fog of war · Monster battles · 3 levels', badge: 'Mini game' },
 ]
 
-export default function StudentDashboard({ onSubject }) {
+export default function StudentDashboard({ onSubject, onBack }) {
   const { studentName, drachmas, completed } = useApp()
 
   const totalActivities = 19
@@ -30,7 +30,7 @@ export default function StudentDashboard({ onSubject }) {
 
   return (
     <div className="min-h-screen">
-      <Header />
+      <Header onBack={onBack} title="Free Explore" />
 
       {/* Hero banner */}
       <div className="px-4 py-6" style={{ background: 'linear-gradient(180deg, #0D2137 0%, #0A1628 100%)' }}>
