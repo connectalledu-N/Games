@@ -8,6 +8,7 @@ const SUBJECTS = [
   { id: 'mythology', label: 'Myth Academy', icon: '🏛️', color: '#9B72CF', bg: 'from-purple-900 to-purple-800', desc: 'Gods · Greek vs Roman · Great Myths', badge: '3 quizzes + God Cards' },
   { id: 'science', label: 'Science Lab', icon: '🔬', color: '#4ade80', bg: 'from-green-900 to-green-800', desc: 'Zeus & Weather · Poseidon & Oceans · Constellations', badge: '3 labs' },
   { id: 'craft', label: 'Craft Workshop', icon: '🎨', color: '#F472B6', bg: 'from-pink-900 to-pink-800', desc: 'Camp map · Shield · Comic · Diorama', badge: '4 projects' },
+  { id: 'game', label: 'Quest Runner', icon: '🎮', color: '#FB923C', bg: 'from-orange-900 to-orange-800', desc: 'Side-scrolling runner · Jump · Dodge · Quiz mode', badge: 'Mini game' },
 ]
 
 export default function StudentDashboard({ onSubject }) {
