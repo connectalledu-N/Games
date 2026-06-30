@@ -9,6 +9,7 @@ import GeographySubject from './pages/GeographySubject'
 import MythologySubject from './pages/MythologySubject'
 import ScienceSubject from './pages/ScienceSubject'
 import CraftSubject from './pages/CraftSubject'
+import QuestRunner from './pages/QuestRunner'
 
 function AppInner() {
   const { mode, setMode } = useApp()
@@ -27,6 +28,7 @@ function AppInner() {
   if (subject === 'mythology') return <MythologySubject onBack={() => setSubject(null)} />
   if (subject === 'science') return <ScienceSubject onBack={() => setSubject(null)} />
   if (subject === 'craft') return <CraftSubject onBack={() => setSubject(null)} />
+  if (subject === 'game') return <QuestRunner onBack={() => setSubject(null)} />
 
   return <StudentDashboard onSubject={setSubject} />
 }
