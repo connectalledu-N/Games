@@ -163,14 +163,14 @@ function revealFog(fog, cx, cy, cols, rows) {
 }
 
 // ─── Main component ───────────────────────────────────────────────────────────
-export default function LabyrinthGame({ onBack }) {
-  const { addDrachmas } = useApp()
+export default function LabyrinthGame({ onBack, startLevel = 0 }) {
+  const { addDrachmas, recordComplete } = useApp()
   const canvasRef = useRef(null)
   const gsRef = useRef(null)           // mutable game state
   const rafRef = useRef(null)
   const inputRef = useRef({ dir: null, held: false })
-  const [screen, setScreen] = useState('select') // select | playing | quiz | dead | levelup | win
-  const [level, setLevel] = useState(0)
+  const [screen, setScreen] = useState(startLevel > 0 ? 'playing' : 'select')
+  const [level, setLevel] = useState(startLevel)
   const [uiScore, setUiScore] = useState(0)
   const [uiLives, setUiLives] = useState(3)
   const [uiHasKey, setUiHasKey] = useState(false)
@@ -399,6 +399,7 @@ export default function LabyrinthGame({ onBack }) {
           // Check exit
           if (gs.hasKey && p.x === gs.exit.x && p.y === gs.exit.y) {
             addDrachmas(50)
+            recordComplete(`game-level-${lvlIdx + 1}`, 1, 1)
             setScreen(lvlIdx < LEVELS.length - 1 ? 'levelup' : 'win')
             cancelAnimationFrame(rafRef.current)
             return
@@ -527,6 +528,7 @@ export default function LabyrinthGame({ onBack }) {
           })
           if (gs.hasKey && p.x === gs.exit.x && p.y === gs.exit.y) {
             addDrachmas(50)
+            recordComplete(`game-level-${level + 1}`, 1, 1)
             setScreen(level < LEVELS.length - 1 ? 'levelup' : 'win')
             cancelAnimationFrame(rafRef.current)
             return

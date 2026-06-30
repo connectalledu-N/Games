@@ -11,7 +11,7 @@ const SUBJECTS = [
   { id: 'game', label: 'Labyrinth Game', icon: '🎮', color: '#FB923C', bg: 'from-orange-900 to-orange-800', desc: 'Top-down maze · Fog of war · Monster battles · 3 levels', badge: 'Mini game' },
 ]
 
-export default function StudentDashboard({ onSubject }) {
+export default function StudentDashboard({ onSubject, onBack }) {
   const { studentName, drachmas, completed } = useApp()
 
   const totalActivities = 19
@@ -30,7 +30,7 @@ export default function StudentDashboard({ onSubject }) {
 
   return (
     <div className="min-h-screen">
-      <Header />
+      <Header onBack={onBack} title="Free Explore" />
 
       {/* Hero banner */}
       <div className="px-4 py-6" style={{ background: 'linear-gradient(180deg, #0D2137 0%, #0A1628 100%)' }}>
