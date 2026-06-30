@@ -89,10 +89,10 @@ export default function TeacherDashboard({ onBack }) {
               <div className="text-xs text-gray-400 mt-2">
                 Current: Day {currentDay !== null && currentDay >= 1 && currentDay <= 3
                   ? currentDay
-                  : currentDay !== null && currentDay > 3 ? '3 (complete)' : '—'
+                  : currentDay !== null && currentDay > 4 ? '4 (complete)' : currentDay === 0 ? 'Trial' : '—'
                 } of 3 · Ends {(() => {
                   const d = new Date(startDate)
-                  d.setDate(d.getDate() + 2)
+                  d.setDate(d.getDate() + 3)
                   return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
                 })()}
               </div>

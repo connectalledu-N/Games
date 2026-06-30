@@ -58,8 +58,8 @@ export function AppProvider({ children }) {
     if (!state.startDate) return null
     const start = new Date(state.startDate)
     const today = new Date(toDateStr(new Date()))
-    const diff = Math.floor((today - start) / 86400000) + 1
-    return diff
+    // diff: 0 = trial day (day before), 1 = Day 1, 2 = Day 2, ...
+    return Math.floor((today - start) / 86400000) + 1
   }
 
   return (
