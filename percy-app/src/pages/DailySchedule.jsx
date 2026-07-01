@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { useApp } from '../store'
 import Header from '../components/Header'
 import { DAILY_PLAN, TRIAL_TASKS, MISS_PENALTY, GAME_UNLOCK_THRESHOLD } from '../data/dailyPlan'
@@ -85,9 +85,20 @@ function TaskCard({ task, done, locked, expanded, onExpand, onStart, color }) {
 
 // ── Main ──────────────────────────────────────────────────────────────────────
 export default function DailySchedule({ onSubject, onFreeExplore }) {
-  const { completed, drachmas, startDate, penaltyApplied, getCurrentDay, applyDayPenalty } = useApp()
+  const { completed, drachmas, startDate, penaltyApplied, getCurrentDay, applyDayPenalty, exportCode } = useApp()
   const [expandedTask, setExpandedTask] = useState(null)
   const [showPenalty, setShowPenalty] = useState(null)
+  const [codeCopied, setCodeCopied] = useState(false)
+
+  const handleShareCode = useCallback(() => {
+    const code = exportCode()
+    navigator.clipboard.writeText(code).then(() => {
+      setCodeCopied(true)
+      setTimeout(() => setCodeCopied(false), 3000)
+    }).catch(() => {
+      prompt('Copy this progress code and give it to your teacher:', code)
+    })
+  }, [exportCode])
 
   const currentDay = getCurrentDay()   // 1-based; 0 = trial day; <0 = before trial; >4 = done
 
@@ -332,10 +343,19 @@ export default function DailySchedule({ onSubject, onFreeExplore }) {
           )
         })}
 
-        <button onClick={onFreeExplore}
-          className="mt-2 text-xs text-gray-600 hover:text-gray-400 transition-colors text-center py-2">
-          Explore all subjects freely →
-        </button>
+        <div className="mt-4 flex flex-col gap-2">
+          <button
+            onClick={handleShareCode}
+            className="w-full py-3 rounded-xl border text-sm font-semibold transition-colors"
+            style={{ borderColor: codeCopied ? '#4ade80' : '#1e3a5f', color: codeCopied ? '#4ade80' : '#7EB8F7', background: codeCopied ? '#0a2a1a' : '#0D2137' }}
+          >
+            {codeCopied ? '✓ Code copied! Give it to your teacher' : '📲 Share Progress Code with Teacher'}
+          </button>
+          <button onClick={onFreeExplore}
+            className="text-xs text-gray-600 hover:text-gray-400 transition-colors text-center py-2">
+            Explore all subjects freely →
+          </button>
+        </div>
       </div>
     </div>
   )

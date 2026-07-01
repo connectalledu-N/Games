@@ -66,10 +66,20 @@ function fmtDate(isoDate, offsetDays = 0) {
 }
 
 export default function TeacherDashboard({ onBack }) {
-  const { completed, drachmas, studentName, startDate, setStartDate, resetProgress, getCurrentDay } = useApp()
+  const { completed, drachmas, studentName, startDate, setStartDate, resetProgress, getCurrentDay, importCode } = useApp()
   const [dateInput, setDateInput] = useState(startDate || '')
   const [dateSaved, setDateSaved] = useState(false)
   const [openDay, setOpenDay] = useState('trial')
+  const [importInput, setImportInput] = useState('')
+  const [importMsg, setImportMsg] = useState(null)
+  const [openActivity, setOpenActivity] = useState(null)
+
+  const handleImport = () => {
+    const ok = importCode(importInput)
+    setImportMsg(ok ? '✓ Progress loaded!' : '✗ Invalid code — try copying again')
+    setTimeout(() => setImportMsg(null), 3000)
+    if (ok) setImportInput('')
+  }
 
   const handleSaveDate = () => {
     if (!dateInput) return
@@ -153,11 +163,37 @@ export default function TeacherDashboard({ onBack }) {
         </div>
 
         {studentName && (
-          <div className="bg-white/5 rounded-xl p-3 mb-5 text-sm">
+          <div className="bg-white/5 rounded-xl p-3 mb-4 text-sm">
             <span className="text-gray-400">Student: </span>
             <span className="text-white font-semibold">{studentName}</span>
           </div>
         )}
+
+        {/* Load progress from student device */}
+        <div className="rounded-xl p-4 mb-6" style={{ background: '#0D2137' }}>
+          <h2 className="font-cinzel text-sm text-gray-300 mb-1">📲 Load Progress from Student Device</h2>
+          <p className="text-xs text-gray-500 mb-3">
+            On the student's device: Student mode → scroll down → tap <strong className="text-gray-400">"Share Progress Code"</strong> → copy it. Then paste below.
+          </p>
+          <div className="flex gap-2">
+            <input
+              type="text"
+              placeholder="Paste progress code here…"
+              value={importInput}
+              onChange={e => setImportInput(e.target.value)}
+              className="flex-1 bg-white/10 border border-white/20 rounded-lg px-3 py-2 text-white text-xs font-mono"
+            />
+            <button onClick={handleImport} disabled={!importInput.trim()}
+              className="px-4 py-2 rounded-lg text-sm font-semibold bg-teal-900 text-teal-300 hover:bg-teal-800 disabled:opacity-40 transition-colors shrink-0">
+              Load
+            </button>
+          </div>
+          {importMsg && (
+            <div className={`mt-2 text-xs font-semibold ${importMsg.startsWith('✓') ? 'text-green-400' : 'text-red-400'}`}>
+              {importMsg}
+            </div>
+          )}
+        </div>
 
         {/* ── Day-by-day prep planner ── */}
         <h2 className="font-cinzel text-base text-gray-300 mb-3">Daily Prep Planner</h2>
@@ -257,12 +293,43 @@ export default function TeacherDashboard({ onBack }) {
               </div>
               {data.activities.length > 0 ? (
                 <div className="flex flex-col gap-1">
-                  {data.activities.map(a => (
-                    <div key={a.id} className="flex justify-between text-xs text-gray-400 py-1 border-t border-white/5">
-                      <span>{a.icon} {a.label}</span>
-                      <span className="text-green-400">{a.result.score}/{a.result.total} · {a.result.date}</span>
-                    </div>
-                  ))}
+                  {data.activities.map(a => {
+                    const isOpen = openActivity === a.id
+                    const pct = Math.round((a.result.score / a.result.total) * 100)
+                    return (
+                      <div key={a.id} className="border-t border-white/5">
+                        <button
+                          className="w-full flex justify-between items-center py-2 text-xs text-gray-400 hover:text-gray-200 transition-colors"
+                          onClick={() => setOpenActivity(isOpen ? null : a.id)}
+                        >
+                          <span>{a.icon} {a.label}</span>
+                          <span className="flex items-center gap-2 shrink-0">
+                            <span className={pct >= 80 ? 'text-green-400' : pct >= 60 ? 'text-yellow-400' : 'text-red-400'}>
+                              {a.result.score}/{a.result.total} ({pct}%)
+                            </span>
+                            <span className="text-gray-600">{a.result.date}</span>
+                            <span className="text-gray-600">{isOpen ? '▲' : '▼'}</span>
+                          </span>
+                        </button>
+                        {isOpen && a.result.answers?.length > 0 && (
+                          <div className="pb-2 flex flex-col gap-1">
+                            {a.result.answers.map((ans, i) => (
+                              <div key={i} className={`text-xs rounded-lg px-3 py-2 flex gap-2 ${ans.correct ? 'bg-green-900/20 text-green-300' : 'bg-red-900/20 text-red-300'}`}>
+                                <span className="shrink-0">{ans.correct ? '✓' : '✗'}</span>
+                                <span className="flex-1">{ans.q}</span>
+                                {!ans.correct && (
+                                  <span className="shrink-0 text-right">gave "{ans.given}" · ans: {ans.answer}</span>
+                                )}
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                        {isOpen && !a.result.answers?.length && (
+                          <div className="text-xs text-gray-600 pb-2 px-1">Complete this activity again to record per-question answers.</div>
+                        )}
+                      </div>
+                    )
+                  })}
                 </div>
               ) : (
                 <div className="text-xs text-gray-600">No activities completed yet</div>

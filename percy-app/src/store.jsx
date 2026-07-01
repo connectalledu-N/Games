@@ -3,12 +3,12 @@ import { useState, useEffect, createContext, useContext } from 'react'
 const AppContext = createContext(null)
 
 const DEFAULT_STATE = {
-  mode: null,           // 'student' | 'teacher'
+  mode: null,
   drachmas: 0,
-  completed: {},        // { 'math-tables': { score, total, date } }
+  completed: {},        // { 'math-tables': { score, total, date, answers: [{q,given,correct,answer}] } }
   studentName: '',
-  startDate: null,      // ISO date string 'YYYY-MM-DD' set by teacher
-  penaltyApplied: {},   // { 'day-1': true } — one-shot penalty per missed day
+  startDate: null,
+  penaltyApplied: {},
 }
 
 function toDateStr(date) {
@@ -31,12 +31,12 @@ export function AppProvider({ children }) {
   const setStudentName = (name) => setState(s => ({ ...s, studentName: name }))
   const addDrachmas = (n) => setState(s => ({ ...s, drachmas: Math.max(0, s.drachmas + n) }))
 
-  const recordComplete = (id, score, total) => {
+  const recordComplete = (id, score, total, answers = []) => {
     setState(s => ({
       ...s,
       completed: {
         ...s.completed,
-        [id]: { score, total, date: new Date().toLocaleDateString('en-GB') },
+        [id]: { score, total, date: new Date().toLocaleDateString('en-GB'), answers },
       },
     }))
   }
@@ -51,28 +51,47 @@ export function AppProvider({ children }) {
     }))
   }
 
+  const exportCode = () => {
+    const data = {
+      drachmas: state.drachmas,
+      completed: state.completed,
+      studentName: state.studentName,
+      startDate: state.startDate,
+      penaltyApplied: state.penaltyApplied,
+    }
+    return btoa(unescape(encodeURIComponent(JSON.stringify(data))))
+  }
+
+  const importCode = (code) => {
+    try {
+      const data = JSON.parse(decodeURIComponent(escape(atob(code.trim()))))
+      setState(s => ({
+        ...s,
+        drachmas: data.drachmas ?? s.drachmas,
+        completed: data.completed ?? s.completed,
+        studentName: data.studentName ?? s.studentName,
+        startDate: data.startDate ?? s.startDate,
+        penaltyApplied: data.penaltyApplied ?? s.penaltyApplied,
+      }))
+      return true
+    } catch { return false }
+  }
+
   const resetProgress = () => setState({ ...DEFAULT_STATE })
 
-  // Helpers exposed to consumers
   const getCurrentDay = () => {
     if (!state.startDate) return null
     const start = new Date(state.startDate)
     const today = new Date(toDateStr(new Date()))
-    // diff: 0 = trial day (day before), 1 = Day 1, 2 = Day 2, ...
     return Math.floor((today - start) / 86400000) + 1
   }
 
   return (
     <AppContext.Provider value={{
       ...state,
-      setMode,
-      setStudentName,
-      addDrachmas,
-      recordComplete,
-      setStartDate,
-      applyDayPenalty,
-      resetProgress,
-      getCurrentDay,
+      setMode, setStudentName, addDrachmas, recordComplete,
+      setStartDate, applyDayPenalty, exportCode, importCode,
+      resetProgress, getCurrentDay,
     }}>
       {children}
     </AppContext.Provider>
