@@ -50,7 +50,7 @@ function TaskCard({ task, done, locked, expanded, onExpand, onStart, color }) {
     }`}>
       <button
         className="w-full text-left px-4 py-3 flex items-center gap-3"
-        onClick={() => !locked && !done && onExpand()}
+        onClick={() => !locked && onExpand()}
         disabled={locked}
       >
         <span className="text-2xl">{task.icon}</span>
@@ -62,12 +62,12 @@ function TaskCard({ task, done, locked, expanded, onExpand, onStart, color }) {
           </div>
           <div className="text-xs text-gray-500 mt-0.5 capitalize">~{task.minutes} min · {task.subject}</div>
         </div>
-        {!done && !locked && (
+        {!locked && (
           <span className="text-gray-600 text-xs shrink-0">{expanded ? '▲' : '▼'}</span>
         )}
       </button>
 
-      {expanded && !done && !locked && (
+      {expanded && !locked && (
         <div className="px-4 pb-4 border-t border-white/5 pt-3">
           <TaskTimer minutes={task.minutes} />
           <button
@@ -75,7 +75,7 @@ function TaskCard({ task, done, locked, expanded, onExpand, onStart, color }) {
             className="mt-3 w-full py-2.5 rounded-xl text-sm font-semibold transition-colors"
             style={{ background: color + '22', color, border: `1px solid ${color}44` }}
           >
-            Start Quest →
+            {done ? 'Redo Quest →' : 'Start Quest →'}
           </button>
         </div>
       )}
