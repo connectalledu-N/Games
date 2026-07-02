@@ -38,29 +38,82 @@ const LEVELS = [
   },
 ]
 
-// ─── Quiz pool ─────────────────────────────────────────────────────────────────
-const QUIZ = [
-  { q: '6 × 7 = ?', a: '42', type: 'input' },
-  { q: '8 × 9 = ?', a: '72', type: 'input' },
-  { q: '7 × 6 = ?', a: '42', type: 'input' },
-  { q: '9 × 9 = ?', a: '81', type: 'input' },
-  { q: '48 ÷ 6 = ?', a: '8', type: 'input' },
-  { q: '56 ÷ 7 = ?', a: '8', type: 'input' },
-  { q: '63 ÷ 9 = ?', a: '7', type: 'input' },
-  { q: '3.5 + 2.8 = ?', a: '6.3', type: 'input' },
-  { q: '5.7 + 3.4 = ?', a: '9.1', type: 'input' },
-  { q: '7.0 − 4.6 = ?', a: '2.4', type: 'input' },
-  { q: "Percy's father is?", a: 'Poseidon', type: 'mc', options: ['Zeus', 'Poseidon', 'Hades', 'Ares'] },
-  { q: "Annabeth's mother is?", a: 'Athena', type: 'mc', options: ['Athena', 'Artemis', 'Aphrodite', 'Hera'] },
-  { q: 'Who built the Labyrinth?', a: 'Daedalus', type: 'mc', options: ['Hephaestus', 'Daedalus', 'Athena', 'Minos'] },
-  { q: "Cerberus guards the?", a: 'Underworld', type: 'mc', options: ['Olympus', 'Labyrinth', 'Underworld', 'Sea'] },
-  { q: "Zeus's weapon?", a: 'Lightning Bolt', type: 'mc', options: ['Trident', 'Lightning Bolt', 'Hammer', 'Spear'] },
-  { q: "Poseidon's Roman name?", a: 'Neptune', type: 'mc', options: ['Mars', 'Neptune', 'Pluto', 'Vulcan'] },
-  { q: 'Medusa turns people to?', a: 'Stone', type: 'mc', options: ['Ice', 'Gold', 'Stone', 'Dust'] },
-  { q: 'How many Olympians?', a: '12', type: 'mc', options: ['10', '11', '12', '13'] },
-  { q: "Hermes' Roman name?", a: 'Mercury', type: 'mc', options: ['Mercury', 'Mars', 'Vulcan', 'Pluto'] },
+// ─── Quiz pools per level (July 6 curriculum) ──────────────────────────────────
+const QUIZ_L1 = [
+  { q: 'How many Olympian gods are there?', a: '12', type: 'mc', options: ['10', '12', '14', '16'] },
+  { q: "Zeus's Roman name is?", a: 'Jupiter', type: 'mc', options: ['Mars', 'Neptune', 'Jupiter', 'Pluto'] },
+  { q: "Poseidon's Roman name is?", a: 'Neptune', type: 'mc', options: ['Mars', 'Neptune', 'Pluto', 'Vulcan'] },
+  { q: "Athena's Roman name is?", a: 'Minerva', type: 'mc', options: ['Diana', 'Minerva', 'Venus', 'Juno'] },
+  { q: "Ares is the god of?", a: 'War', type: 'mc', options: ['Sea', 'War', 'Sun', 'Sky'] },
+  { q: "Aphrodite's Roman name is?", a: 'Venus', type: 'mc', options: ['Venus', 'Juno', 'Ceres', 'Diana'] },
+  { q: 'Who was the leader of the Titans?', a: 'Kronos', type: 'mc', options: ['Atlas', 'Kronos', 'Hyperion', 'Iapetus'] },
+  { q: "Medusa turns people to?", a: 'Stone', type: 'mc', options: ['Ice', 'Gold', 'Stone', 'Dust'] },
+  { q: "Percy's father is which Olympian?", a: 'Poseidon', type: 'mc', options: ['Zeus', 'Poseidon', 'Hades', 'Ares'] },
   { q: "Athena's symbol is?", a: 'Owl', type: 'mc', options: ['Eagle', 'Owl', 'Dove', 'Snake'] },
+  { q: "Hermes is the god of?", a: 'Messengers', type: 'mc', options: ['Sea', 'Fire', 'Messengers', 'War'] },
+  { q: "Apollo's Roman name is?", a: 'Apollo', type: 'mc', options: ['Sol', 'Apollo', 'Helios', 'Phoebus'] },
+  { q: "Camp Half-Blood is in which US state?", a: 'New York', type: 'mc', options: ['Florida', 'New York', 'California', 'Texas'] },
+  { q: "Which sea borders Greece to the south?", a: 'Mediterranean', type: 'mc', options: ['Atlantic', 'Mediterranean', 'Black', 'Red'] },
+  { q: "Which Greek island is famous for its volcano?", a: 'Santorini', type: 'mc', options: ['Rhodes', 'Crete', 'Santorini', 'Corfu'] },
+  { q: "Crete is the largest island of which country?", a: 'Greece', type: 'mc', options: ['Italy', 'Turkey', 'Greece', 'Cyprus'] },
+  { q: "The capital of modern Greece is?", a: 'Athens', type: 'mc', options: ['Sparta', 'Athens', 'Corinth', 'Olympia'] },
+  { q: "Orion is a?", a: 'Constellation', type: 'mc', options: ['Planet', 'Star', 'Constellation', 'Galaxy'] },
+  { q: "Which constellation is also called The Great Bear?", a: 'Ursa Major', type: 'mc', options: ['Orion', 'Perseus', 'Ursa Major', 'Scorpius'] },
+  { q: "Perseus slew which monster in Greek myth?", a: 'Medusa', type: 'mc', options: ['Hydra', 'Medusa', 'Minotaur', 'Cerberus'] },
+  { q: 'Half of 3/4 is?', a: '3/8', type: 'mc', options: ['1/4', '3/8', '1/2', '6/8'] },
+  { q: 'A cabin is 6 m long and 4 m wide. Perimeter?', a: '20 m', type: 'mc', options: ['24 m', '10 m', '20 m', '18 m'] },
+  { q: 'Area of a 5 m × 3 m cabin floor?', a: '15 m²', type: 'mc', options: ['8 m²', '15 m²', '16 m²', '18 m²'] },
+  { q: '1/2 + 1/4 = ?', a: '3/4', type: 'mc', options: ['1/2', '2/4', '3/4', '1'] },
+  { q: 'The root "hydro" means?', a: 'Water', type: 'mc', options: ['Fire', 'Earth', 'Water', 'Air'] },
+  { q: 'The root "geo" means?', a: 'Earth', type: 'mc', options: ['Sea', 'Sky', 'Earth', 'Star'] },
+  { q: 'The root "astro" means?', a: 'Star', type: 'mc', options: ['Moon', 'Star', 'Sun', 'Space'] },
+  { q: 'The root "chron" means?', a: 'Time', type: 'mc', options: ['Speed', 'Distance', 'Time', 'Power'] },
+  { q: 'The root "mega" means?', a: 'Large', type: 'mc', options: ['Small', 'Fast', 'Large', 'Bright'] },
+  { q: 'The root "poly" means?', a: 'Many', type: 'mc', options: ['One', 'Many', 'Half', 'None'] },
 ]
+
+const QUIZ_L2 = [
+  { q: "The Oracle of Delphi gave what?", a: 'Prophecies', type: 'mc', options: ['Weapons', 'Maps', 'Prophecies', 'Drachmas'] },
+  { q: "A phalanx was a Greek?", a: 'Battle formation', type: 'mc', options: ['Ship', 'Temple', 'Battle formation', 'Festival'] },
+  { q: "The Battle of Marathon was fought against?", a: 'Persia', type: 'mc', options: ['Rome', 'Persia', 'Egypt', 'Sparta'] },
+  { q: "Democracy was invented in ancient?", a: 'Athens', type: 'mc', options: ['Rome', 'Sparta', 'Athens', 'Corinth'] },
+  { q: "The first Olympic Games were held in?", a: 'Olympia', type: 'mc', options: ['Athens', 'Sparta', 'Corinth', 'Olympia'] },
+  { q: "A hero's journey always includes a?", a: 'Quest', type: 'mc', options: ['Feast', 'Quest', 'Crown', 'Map'] },
+  { q: "Kronos is the Titan of?", a: 'Time', type: 'mc', options: ['Sea', 'Fire', 'Time', 'Sky'] },
+  { q: "How many time zones does the US have?", a: '4', type: 'mc', options: ['2', '3', '4', '6'] },
+  { q: "New York is in which time zone?", a: 'Eastern', type: 'mc', options: ['Pacific', 'Central', 'Mountain', 'Eastern'] },
+  { q: "The Mediterranean Sea borders how many continents?", a: '3', type: 'mc', options: ['2', '3', '4', '5'] },
+  { q: "Stars twinkle. Planets appear to?", a: 'Shine steadily', type: 'mc', options: ['Twinkle faster', 'Shine steadily', 'Change colour', 'Disappear'] },
+  { q: "Constellations appear to move because Earth?", a: 'Orbits the Sun', type: 'mc', options: ['Spins faster', 'Orbits the Sun', 'Moves closer', 'Has fog'] },
+  { q: "Scorpius is best seen in which season?", a: 'Summer', type: 'mc', options: ['Winter', 'Spring', 'Summer', 'Autumn'] },
+  { q: "If it is 3 pm Eastern, what time is it Pacific?", a: '12 pm', type: 'mc', options: ['1 pm', '12 pm', '6 pm', '2 pm'] },
+  { q: '3/4 − 1/4 = ?', a: '1/2', type: 'mc', options: ['2/4', '1/2', '1/4', '3/8'] },
+  { q: "A prophecy is a?", a: 'Prediction of the future', type: 'mc', options: ['Map of Greece', 'List of gods', 'Prediction of the future', 'Battle plan'] },
+  { q: 'The root "mort" means?', a: 'Death', type: 'mc', options: ['Life', 'Death', 'War', 'Water'] },
+]
+
+const QUIZ_L3 = [
+  { q: "Hephaestus is the god of?", a: 'Fire & Forge', type: 'mc', options: ['Sea', 'War', 'Fire & Forge', 'Wisdom'] },
+  { q: "Dionysus is the god of?", a: 'Wine & Celebration', type: 'mc', options: ['Sun', 'Wine & Celebration', 'Sea', 'War'] },
+  { q: "Artemis is the goddess of?", a: 'The Hunt', type: 'mc', options: ['Love', 'War', 'The Hunt', 'Wisdom'] },
+  { q: "Which island did the Minotaur live on?", a: 'Crete', type: 'mc', options: ['Ithaca', 'Rhodes', 'Crete', 'Santorini'] },
+  { q: "Odysseus was king of?", a: 'Ithaca', type: 'mc', options: ['Corfu', 'Crete', 'Rhodes', 'Ithaca'] },
+  { q: "Area of a rectangle 8 m × 6 m?", a: '48 m²', type: 'mc', options: ['14 m²', '28 m²', '48 m²', '56 m²'] },
+  { q: "Perimeter of a square with side 7 m?", a: '28 m', type: 'mc', options: ['14 m', '21 m', '28 m', '49 m'] },
+  { q: '2/3 + 1/6 = ?', a: '5/6', type: 'mc', options: ['3/9', '1/2', '5/6', '3/6'] },
+  { q: "If Percy drives 300 miles at 60 mph, how many hours?", a: '5', type: 'mc', options: ['3', '4', '5', '6'] },
+  { q: "The root 'hydro' + 'phobia' means fear of?", a: 'Water', type: 'mc', options: ['Fire', 'Water', 'Spiders', 'Heights'] },
+  { q: "Ursa Major contains which famous star pattern?", a: 'Big Dipper', type: 'mc', options: ['Southern Cross', 'Big Dipper', "Orion's Belt", 'Pleiades'] },
+  { q: "Perseus used a mirror-shield against which monster?", a: 'Medusa', type: 'mc', options: ['Cerberus', 'Hydra', 'Medusa', 'Cyclops'] },
+  { q: "Cassiopeia was a queen from which myth?", a: 'Greek', type: 'mc', options: ['Roman', 'Egyptian', 'Greek', 'Norse'] },
+]
+
+function pickQuiz(lvlIdx) {
+  const pool = lvlIdx === 0 ? QUIZ_L1
+    : lvlIdx === 1 ? [...QUIZ_L2, ...QUIZ_L1.slice(0, 10)]
+    : [...QUIZ_L3, ...QUIZ_L2.slice(0, 8), ...QUIZ_L1.slice(0, 6)]
+  return pool[Math.floor(Math.random() * pool.length)]
+}
 
 // ─── Maze generation (iterative DFS) ──────────────────────────────────────────
 function genMaze(cols, rows) {
@@ -450,7 +503,7 @@ export default function LabyrinthGame({ onBack, startLevel = 0 }) {
           if (dist < CELL * 0.7) {
             // Trigger quiz
             cancelAnimationFrame(rafRef.current)
-            const q = QUIZ[Math.floor(Math.random() * QUIZ.length)]
+            const q = pickQuiz(lvlIdx)
             setQuiz({ ...q, monster: m })
             setQuizInput('')
             setQuizFeedback(null)
@@ -567,7 +620,7 @@ export default function LabyrinthGame({ onBack, startLevel = 0 }) {
           const dist = Math.hypot(m.px - p.px, m.py - p.py)
           if (dist < CELL * 0.7) {
             cancelAnimationFrame(rafRef.current)
-            const q = QUIZ[Math.floor(Math.random() * QUIZ.length)]
+            const q = pickQuiz(level)
             setQuiz({ ...q, monster: m }); setQuizInput(''); setQuizFeedback(null); setScreen('quiz')
             return
           }

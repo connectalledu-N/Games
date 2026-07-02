@@ -314,11 +314,16 @@ export default function TeacherDashboard({ onBack }) {
                         {isOpen && a.result.answers?.length > 0 && (
                           <div className="pb-2 flex flex-col gap-1">
                             {a.result.answers.map((ans, i) => (
-                              <div key={i} className={`text-xs rounded-lg px-3 py-2 flex gap-2 ${ans.correct ? 'bg-green-900/20 text-green-300' : 'bg-red-900/20 text-red-300'}`}>
-                                <span className="shrink-0">{ans.correct ? '✓' : '✗'}</span>
-                                <span className="flex-1">{ans.q}</span>
+                              <div key={i} className={`text-xs rounded-lg px-3 py-2 ${ans.correct ? 'bg-green-900/20 border border-green-800/30' : 'bg-red-900/20 border border-red-800/30'}`}>
+                                <div className="flex gap-2 items-start">
+                                  <span className="shrink-0 font-bold">{ans.correct ? '✓' : '✗'}</span>
+                                  <span className="flex-1 text-gray-200">{ans.q}</span>
+                                </div>
                                 {!ans.correct && (
-                                  <span className="shrink-0 text-right">gave "{ans.given}" · ans: {ans.answer}</span>
+                                  <div className="mt-1.5 ml-4 flex flex-col gap-0.5">
+                                    <span className="text-red-300">Student wrote: <strong>"{ans.given}"</strong></span>
+                                    <span className="text-green-300 font-semibold">✔ Correct answer: <strong>{ans.answer}</strong></span>
+                                  </div>
                                 )}
                               </div>
                             ))}
