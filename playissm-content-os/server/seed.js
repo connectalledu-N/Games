@@ -2,7 +2,10 @@
 // Safe to re-run: it wipes and reloads all tables (your local sqlite file
 // is a planning cache, not a source of truth — the source of truth is this file
 // and whatever you edit in the app afterward).
+import { fileURLToPath } from 'node:url';
 import { db } from './db.js';
+
+export function runSeed() {
 
 const wipe = db.transaction(() => {
   for (const t of [
@@ -509,3 +512,11 @@ console.log(` - ${db.prepare('SELECT COUNT(*) c FROM sequences').get().c} sequen
 console.log(` - ${db.prepare('SELECT COUNT(*) c FROM posts').get().c} posts`);
 console.log(` - ${db.prepare('SELECT COUNT(*) c FROM hashtag_groups').get().c} hashtag groups`);
 console.log(` - ${db.prepare('SELECT COUNT(*) c FROM wiki_pages').get().c} wiki pages`);
+
+}
+
+// Run directly (`node seed.js` / `npm run seed`) vs. imported by index.js
+// for the first-boot auto-seed — only the CLI invocation logs/exits.
+if (process.argv[1] === fileURLToPath(import.meta.url)) {
+  runSeed();
+}

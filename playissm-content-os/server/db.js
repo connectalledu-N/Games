@@ -4,7 +4,10 @@ import fs from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const dataDir = path.join(__dirname, 'data');
+// DATA_DIR lets a persistent volume (e.g. a Railway volume) override where
+// the sqlite file lives, so data survives redeploys instead of living in
+// the ephemeral container filesystem.
+const dataDir = process.env.DATA_DIR || path.join(__dirname, 'data');
 if (!fs.existsSync(dataDir)) fs.mkdirSync(dataDir, { recursive: true });
 
 const dbPath = path.join(dataDir, 'content-os.sqlite');

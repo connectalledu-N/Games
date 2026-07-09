@@ -25,6 +25,28 @@ Open http://localhost:5173.
 starting plan; day-to-day edits you make in the app live only in
 `server/data/content-os.sqlite` (gitignored) until you re-seed.
 
+## Deploying (Railway)
+
+This is a stateful app (SQLite file on disk), so it needs a host that gives
+you a persistent container + volume, not a serverless one. Railway fits:
+
+1. Sign up at railway.app (GitHub login works, no separate password).
+2. **New Project → Deploy from GitHub repo** → pick this repo.
+3. In the service's **Settings → Source**, set **Root Directory** to
+   `playissm-content-os` (this repo has other unrelated projects at the top level).
+4. Railway auto-detects `railway.json` in that directory: it runs
+   `npm install && npm run build` to build the client, then `npm start` to
+   boot the Express server, which serves the built client and the API from
+   one process on one port.
+5. Add a **Volume** to the service, mounted at `/data`, and set the env var
+   `DATA_DIR=/data` so the SQLite file lives on the volume instead of the
+   container's ephemeral disk — otherwise every redeploy wipes your data.
+6. First boot with an empty volume auto-seeds the locked starting plan
+   (see `server/index.js` — it seeds automatically if the `brands` table is
+   empty). After that, seeding again requires running `npm run seed` yourself
+   (via Railway's shell) since it's destructive.
+7. Railway gives you a `*.up.railway.app` URL — that's what you open day to day.
+
 ## Structure
 
 - `server/db.js` — schema (brands, pillars, platforms, posts, checklist_items,
