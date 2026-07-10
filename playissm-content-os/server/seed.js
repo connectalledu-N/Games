@@ -38,12 +38,12 @@ function insertPillar({ name, description, color, brand_id }) {
   return info.lastInsertRowid;
 }
 
-function insertPlatform({ name, account_type, cadence_days, default_time = '11:00', color, active = 1 }) {
+function insertPlatform({ name, account_type, cadence_days, default_time = '11:00', icon = '', color, active = 1 }) {
   const info = db
     .prepare(
-      'INSERT INTO platforms (name, account_type, cadence_days, default_time, color, active) VALUES (?, ?, ?, ?, ?, ?)'
+      'INSERT INTO platforms (name, account_type, cadence_days, default_time, icon, color, active) VALUES (?, ?, ?, ?, ?, ?, ?)'
     )
-    .run(name, account_type, JSON.stringify(cadence_days), default_time, color, active ? 1 : 0);
+    .run(name, account_type, JSON.stringify(cadence_days), default_time, icon, color, active ? 1 : 0);
   return info.lastInsertRowid;
 }
 
@@ -162,42 +162,49 @@ const liCompany = insertPlatform({
   name: 'LinkedIn (Company)',
   account_type: 'Company Page',
   cadence_days: [2, 4],
+  icon: '💼',
   color: '#0a66c2',
 });
 const liPersonal = insertPlatform({
   name: 'LinkedIn (Personal)',
   account_type: 'Personal Profile',
   cadence_days: [3, 5],
+  icon: '👤',
   color: '#0a66c2',
 });
 const igBrand = insertPlatform({
   name: 'Instagram (Brand)',
   account_type: 'Brand Account',
   cadence_days: [2, 4, 6],
+  icon: '📸',
   color: '#d62976',
 });
 const igPersonal = insertPlatform({
   name: 'Instagram (Personal)',
   account_type: 'Personal Account',
   cadence_days: [3, 5, 0],
+  icon: '🌤️',
   color: '#d62976',
 });
 const substack = insertPlatform({
   name: 'Substack',
   account_type: 'Publication',
   cadence_days: [2, 4, 6],
+  icon: '✉️',
   color: '#ff6719',
 });
 const youtube = insertPlatform({
   name: 'YouTube',
   account_type: 'Channel',
   cadence_days: [2],
+  icon: '▶️',
   color: '#ff0000',
 });
 insertPlatform({
   name: 'Facebook',
   account_type: 'Page',
   cadence_days: [],
+  icon: '👍',
   color: '#1877f2',
   active: 0,
 });
@@ -205,6 +212,7 @@ insertPlatform({
   name: 'Spotify',
   account_type: 'Podcast',
   cadence_days: [],
+  icon: '🎧',
   color: '#1db954',
   active: 0,
 });
@@ -503,6 +511,48 @@ insertPost({
 db.prepare(
   'INSERT INTO post_links (post_id, related_post_id, relation_label) VALUES (?, ?, ?)'
 ).run(revealPost2, revealPost1, 'Follows on from');
+
+// ---------- Open cadence slots ----------
+// Beyond the two named arcs, the regular weekly cadence goes blank after
+// this week. Rather than leave future weeks empty, drop an unassigned
+// "open slot" placeholder (no pillar, no content) on every cadence day
+// that doesn't already have a post — Neha fills these in on planning day
+// instead of creating slots from scratch. The client recognizes an empty
+// pillar + empty body + Idea status as a fillable slot and styles it dashed.
+const cadences = [
+  { id: liCompany, name: 'LinkedIn (Company)', days: [2, 4] },
+  { id: liPersonal, name: 'LinkedIn (Personal)', days: [3, 5] },
+  { id: igBrand, name: 'Instagram (Brand)', days: [2, 4, 6] },
+  { id: igPersonal, name: 'Instagram (Personal)', days: [3, 5, 0] },
+  { id: substack, name: 'Substack', days: [2, 4, 6] },
+  { id: youtube, name: 'YouTube', days: [2] },
+];
+
+const takenSlots = new Set(
+  db
+    .prepare('SELECT platform_id, scheduled_date FROM posts')
+    .all()
+    .map((r) => `${r.platform_id}|${r.scheduled_date}`)
+);
+
+const slotRangeStart = new Date(2026, 6, 13); // Mon Jul 13, 2026
+const slotRangeEnd = new Date(2026, 7, 30); // Sun Aug 30, 2026
+for (let d = new Date(slotRangeStart); d <= slotRangeEnd; d.setDate(d.getDate() + 1)) {
+  const iso = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+  const weekday = d.getDay();
+  for (const platform of cadences) {
+    if (!platform.days.includes(weekday)) continue;
+    if (takenSlots.has(`${platform.id}|${iso}`)) continue;
+    insertPost({
+      title: `Open slot — ${platform.name}`,
+      platform_id: platform.id,
+      pillar_id: null,
+      scheduled_date: iso,
+      status: 'Idea',
+      checklist: ['Decide topic', 'Draft', 'Schedule'],
+    });
+  }
+}
 
 console.log('Seed complete:');
 console.log(` - ${db.prepare('SELECT COUNT(*) c FROM brands').get().c} brands`);
