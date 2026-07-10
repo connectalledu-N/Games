@@ -5,6 +5,7 @@ import CalendarPage from './pages/CalendarPage.jsx';
 import KanbanPage from './pages/KanbanPage.jsx';
 import SequencesPage from './pages/SequencesPage.jsx';
 import DashboardPage from './pages/DashboardPage.jsx';
+import PlatformsPage from './pages/PlatformsPage.jsx';
 import HashtagsPage from './pages/HashtagsPage.jsx';
 import WikiPage from './pages/WikiPage.jsx';
 import PostModal from './components/PostModal.jsx';
@@ -15,6 +16,7 @@ const NAV = [
   { to: '/board', label: 'Board' },
   { to: '/sequences', label: 'Sequences' },
   { to: '/dashboard', label: 'Dashboard' },
+  { to: '/platforms', label: 'Platforms' },
   { to: '/hashtags', label: 'Hashtags' },
   { to: '/wiki', label: 'Reference' },
 ];
@@ -86,6 +88,7 @@ export default function App() {
               <Route path="/board" element={<KanbanPage />} />
               <Route path="/sequences" element={<SequencesPage />} />
               <Route path="/dashboard" element={<DashboardPage />} />
+              <Route path="/platforms" element={<PlatformsPage />} />
               <Route path="/hashtags" element={<HashtagsPage />} />
               <Route path="/wiki" element={<WikiPage />} />
             </Routes>
