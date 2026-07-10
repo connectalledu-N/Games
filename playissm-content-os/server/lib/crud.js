@@ -24,6 +24,11 @@ export function crudRouter(table, { jsonFields = [] } = {}) {
     for (const f of jsonFields) {
       if (f in out) out[f] = JSON.stringify(out[f] ?? []);
     }
+    // better-sqlite3 only binds numbers, strings, bigints, buffers, and null —
+    // booleans (e.g. a platform's "active" checkbox) need coercing to 0/1.
+    for (const key of Object.keys(out)) {
+      if (typeof out[key] === 'boolean') out[key] = out[key] ? 1 : 0;
+    }
     delete out.id;
     return out;
   }

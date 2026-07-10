@@ -8,6 +8,7 @@ import { runSeed } from './seed.js';
 
 import { crudRouter } from './lib/crud.js';
 import postsRouter from './routes/posts.js';
+import platformNotesRouter from './routes/platformNotes.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -29,6 +30,7 @@ app.use('/api/sequences', crudRouter('sequences'));
 app.use('/api/hashtag-groups', crudRouter('hashtag_groups', { jsonFields: ['tags'] }));
 app.use('/api/wiki', crudRouter('wiki_pages'));
 app.use('/api/posts', postsRouter);
+app.use('/api/platform-notes', platformNotesRouter);
 
 app.get('/api/health', (req, res) => res.json({ ok: true }));
 

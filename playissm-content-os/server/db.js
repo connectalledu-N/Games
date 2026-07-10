@@ -98,6 +98,13 @@ CREATE TABLE IF NOT EXISTS wiki_pages (
   sort_order INTEGER NOT NULL DEFAULT 0
 );
 
+CREATE TABLE IF NOT EXISTS platform_notes (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  platform_id INTEGER NOT NULL REFERENCES platforms(id) ON DELETE CASCADE,
+  content TEXT NOT NULL,
+  created_at TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
 CREATE TABLE IF NOT EXISTS meta (
   key TEXT PRIMARY KEY,
   value TEXT

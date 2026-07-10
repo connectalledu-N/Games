@@ -46,4 +46,13 @@ export const api = {
     removeLink: (postId, linkId) =>
       request(`/posts/${postId}/links/${linkId}`, { method: 'DELETE' }),
   },
+  platformNotes: {
+    list: (platformId) => request(`/platform-notes?platform_id=${platformId}`),
+    create: (platformId, content) =>
+      request('/platform-notes', {
+        method: 'POST',
+        body: JSON.stringify({ platform_id: platformId, content }),
+      }),
+    remove: (id) => request(`/platform-notes/${id}`, { method: 'DELETE' }),
+  },
 };
