@@ -38,6 +38,7 @@ CREATE TABLE IF NOT EXISTS platforms (
   account_type TEXT,
   cadence_days TEXT NOT NULL DEFAULT '[]',
   default_time TEXT NOT NULL DEFAULT '11:00',
+  icon TEXT NOT NULL DEFAULT '',
   color TEXT NOT NULL DEFAULT '#f59e0b',
   active INTEGER NOT NULL DEFAULT 1
 );
@@ -102,5 +103,12 @@ CREATE TABLE IF NOT EXISTS meta (
   value TEXT
 );
 `);
+
+// Lightweight migration: CREATE TABLE IF NOT EXISTS won't retrofit new
+// columns onto a database created by an earlier version of this schema.
+const platformColumns = db.prepare('PRAGMA table_info(platforms)').all().map((c) => c.name);
+if (!platformColumns.includes('icon')) {
+  db.exec("ALTER TABLE platforms ADD COLUMN icon TEXT NOT NULL DEFAULT ''");
+}
 
 export default db;
