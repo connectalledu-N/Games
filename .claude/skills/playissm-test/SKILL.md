@@ -3,12 +3,13 @@ name: playissm-test
 description: >-
   Tests a PLAYISSM product or the PLAYISSM website with the Founder skills
   (board, competitors, consumer panel, pricing, offer, CFO, marketing, brand,
-  ops, launch, plan), already loaded with PLAYISSM's brand context. Products:
-  PLAYISSM (the ISSM methodology), Kagami, PlaySense, or any new offer. The
+  ops, launch, plan), already loaded with PLAYISSM's brand context. Targets:
+  PLAYISSM (the umbrella and ISSM method), its verticals PlaySense, Kagami and
+  PlayStudio, or any new offer. The
   website test reviews a live page as buyers would see it. Use when the user
-  says "test Playissm", "test Kagami", "test PlaySense", "test the website",
+  says "test Playissm", "test Kagami", "test PlaySense", "test PlayStudio", "test the website",
   "run the founder skills on Playissm", or "/playissm-test".
-argument-hint: "[playissm | kagami | playsense | website <url> | <new product>] [--quick | --full]"
+argument-hint: "[playissm | playsense | kagami | playstudio | website <url> | <new product>] [--quick | --full]"
 ---
 
 # PLAYISSM test
@@ -23,7 +24,8 @@ Read `${CLAUDE_SKILL_DIR}/context.md` first.
 
 From the arguments, or by asking once if missing, settle:
 
-- **Target**: `playissm`, `kagami`, `playsense`, `website <url>`, or a new
+- **Target**: `playissm`, `playsense`, `kagami`, `playstudio`, `website <url>`
+  (default https://www.playissm.com), or a new
   product (name it in a few words).
 - **Depth**:
   - `--quick` (default): board → consumer panel `--quick` (20 buyers) → pricing
@@ -49,7 +51,10 @@ starting:
 2. Write `founder/idea.md` from `context.md` plus the user's answers: the
    product, who it is for, the problem, how it is delivered, the price (or
    "unknown"), the stage, and how it fits the brand architecture
-   (Playstudios → PLAYISSM → Kagami / PlaySense).
+   (PLAYISSM umbrella → PlaySense / Kagami / PlayStudio). Use the vertical's own
+   audience list from `context.md`, and say what it is not ("We are not").
+   The original brand PDFs are in `${CLAUDE_SKILL_DIR}/docs/` if more detail is
+   needed.
 
 ## 2. Run the chain
 
@@ -74,8 +79,11 @@ itself needs an answer.
      to do next? Answer from the panel's own words.
    - **Offer clarity**: run the `founder-offer` value equation on what the
      page states (not what PLAYISSM intends).
-   - **Brand fit**: does the page match the brand architecture and voice in
-     `context.md`? Are PLAYISSM, Kagami and PlaySense clearly told apart?
+   - **Brand fit**: check the page against "Brand rules" in `context.md`
+     (PLAYISSM in capitals, the standard description word for word, vertical
+     names and descriptors, Crimson only on PLAYISSM, text in Indigo or Ink).
+     Are PlaySense, Kagami and PlayStudio clearly told apart, and does each
+     reach its own buyer?
    - **Friction**: broken links, slow or empty sections, phone layout
      problems, a missing price or call to action.
    - **Top 5 fixes**, ranked by how many simulated buyers each would flip, each
