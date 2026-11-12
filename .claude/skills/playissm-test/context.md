@@ -126,8 +126,6 @@ Never copy figures from it into this file or any committed file.
 ## Unknowns (PLACEHOLDER)
 
 - PlaySense teal hex.
-- Kagami family pricing; PlaySense Digital and Care Package prices;
-  PlayStudio pricing model.
-- Payment terms and margin on the current PlaySense project.
-- Monthly fixed costs.
+- PlaySense Digital and Care Package prices; PlayStudio pricing model.
+  (Kagami pricing, project margin and fixed costs are in `private/plan.md`.)
 - Known competitors.
