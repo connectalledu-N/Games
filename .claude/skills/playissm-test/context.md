@@ -60,7 +60,8 @@ offer and proof.
 - For: airports and transport, hospitality, public spaces, real estate,
   workplaces, institutions, communities, organisations seeking inclusive
   environments.
-- Accent colour: teal (assumed from the documents' order; confirm).
+- Palette label: "Sensory wellness". Accent: teal (exact hex not in the
+  palette sheet; confirm).
 
 ### Kagami 鏡: learning ecosystem (works through learning)
 
@@ -69,6 +70,7 @@ offer and proof.
   experiences and self-directed discovery, instead of a fixed sequence of
   instruction.
 - Difference: not a conventional online school or a digital content library.
+- Palette label: "Home Studio School". Accent: Neon Yellow #FFFF00.
 - For: children and families, learners outside traditional schooling,
   educators, schools and learning communities, collaborators.
 
@@ -80,6 +82,7 @@ offer and proof.
   instead of separate programmes.
 - Difference: more than a play café, activity centre or tuition space.
 - Direction: a flagship physical model that becomes repeatable.
+- Palette label: "Physical play spaces". Accent: Neon Orange #FF5500.
 - For: children and families, communities, schools and educators, creators
   and partners.
 
@@ -89,10 +92,19 @@ offer and proof.
 - Verticals in CamelCase, singular, never abbreviated: PlaySense, Kagami,
   PlayStudio. First mention carries the descriptor.
 - "Verticals" in business documents, "expressions" in brand storytelling.
-- Colours: PLAYISSM logo lockup in Indigo, Deep Plum and Crimson; Crimson
-  belongs to PLAYISSM alone. Verticals use Indigo, Ink, White and Brume plus
-  one accent each (teal, yellow, orange). Accents fill shapes; text stays
-  Indigo or Ink.
+- Colours (palette sheets in `docs/palette-*.png`):
+  - Shared: Indigo Profond #0A083A, Ink #1A1A1A, White #FFFFFF,
+    Brume #C2F2E4.
+  - PLAYISSM only: Deep Plum #2C1228, Crimson #E80E4A. Crimson belongs to
+    PLAYISSM alone.
+  - Accents, one per vertical: PlaySense teal, Kagami Neon Yellow #FFFF00,
+    PlayStudio Neon Orange #FF5500.
+  - Accents fill shapes; text stays Indigo or Ink.
+- Inconsistencies seen in the palette sheets (flag them in brand reviews):
+  the sheet says "PlayStudios" (the rule is singular "PlayStudio"); it labels
+  PlaySense "Sensory wellness" while the positioning says PLAYISSM is "not a
+  generic wellness brand"; it calls Kagami a "Home Studio School" while the
+  one-pagers say "a global studio school".
 
 ## Content plan (from the Content OS)
 
@@ -102,13 +114,20 @@ offer and proof.
 - Note: the Content OS seed still lists "Playstudios" as an umbrella above
   PLAYISSM and has no PlayStudio vertical; it is out of date.
 
+## Plan, stage and numbers
+
+Confidential. Kept in `private/plan.md` (git-ignored, because this repository
+is public). If that file exists, read it before any test: it has the goals,
+the status of each project, budgets, the pipeline and the revised project
+timeline. If it does not exist (for example in a fresh session), ask the user
+to upload the Start Here plan and the Operating System workbook again.
+Never copy figures from it into this file or any committed file.
+
 ## Unknowns (PLACEHOLDER)
 
-- Which accent colour belongs to which vertical.
-- Prices and how each vertical is sold (project fee, licence, membership,
-  tuition, day pass, café spend).
-- The specific first buyer for each vertical and the region.
-- Costs: team, delivery, rent and fit-out (PlayStudio), staffing.
-- Stage and proof: pilots, signed clients, enrolled families, revenue,
-  waitlist.
+- PlaySense teal hex.
+- Kagami family pricing; PlaySense Digital and Care Package prices;
+  PlayStudio pricing model.
+- Payment terms and margin on the current PlaySense project.
+- Monthly fixed costs.
 - Known competitors.

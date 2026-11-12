@@ -20,7 +20,9 @@ does not re-explain the brand every time.
 
 ## 0. Pick the target and depth
 
-Read `${CLAUDE_SKILL_DIR}/context.md` first.
+Read `${CLAUDE_SKILL_DIR}/context.md` first, then
+`${CLAUDE_SKILL_DIR}/private/plan.md` if it exists (confidential; never copy
+its figures into committed files).
 
 From the arguments, or by asking once if missing, settle:
 
@@ -91,7 +93,8 @@ itself needs an answer.
 
 ## 4. Archive and report
 
-Copy `founder/` to `playissm-tests/<target>-<YYYY-MM-DD>/` (add `-2`, `-3`
+Copy `founder/` to `playissm-tests/<target>-<YYYY-MM-DD>/` (both folders are
+git-ignored because the repository is public; do not commit them) (add `-2`, `-3`
 for repeat runs that day). Then give the user:
 
 - the verdict in one line (from `founder-plan` on a full run; on a quick run:
